@@ -17,9 +17,9 @@ using NzbDrone.Integration.Test.Client;
 using NzbDrone.SignalR;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
-using Readarr.Api.V1.Albums;
-using Readarr.Api.V1.Artist;
+using Readarr.Api.V1.Author;
 using Readarr.Api.V1.Blacklist;
+using Readarr.Api.V1.Books;
 using Readarr.Api.V1.Config;
 using Readarr.Api.V1.DownloadClient;
 using Readarr.Api.V1.History;
@@ -51,8 +51,8 @@ namespace NzbDrone.Integration.Test
         public ClientBase<RootFolderResource> RootFolders;
         public ArtistClient Artist;
         public ClientBase<TagResource> Tags;
-        public ClientBase<AlbumResource> WantedMissing;
-        public ClientBase<AlbumResource> WantedCutoffUnmet;
+        public ClientBase<BookResource> WantedMissing;
+        public ClientBase<BookResource> WantedCutoffUnmet;
 
         private List<SignalRMessage> _signalRReceived;
 
@@ -114,8 +114,8 @@ namespace NzbDrone.Integration.Test
             RootFolders = new ClientBase<RootFolderResource>(RestClient, ApiKey);
             Artist = new ArtistClient(RestClient, ApiKey);
             Tags = new ClientBase<TagResource>(RestClient, ApiKey);
-            WantedMissing = new ClientBase<AlbumResource>(RestClient, ApiKey, "wanted/missing");
-            WantedCutoffUnmet = new ClientBase<AlbumResource>(RestClient, ApiKey, "wanted/cutoff");
+            WantedMissing = new ClientBase<BookResource>(RestClient, ApiKey, "wanted/missing");
+            WantedCutoffUnmet = new ClientBase<BookResource>(RestClient, ApiKey, "wanted/cutoff");
         }
 
         [OneTimeTearDown]
@@ -249,7 +249,7 @@ namespace NzbDrone.Integration.Test
             Assert.Fail("Timed on wait");
         }
 
-        public ArtistResource EnsureArtist(string authorId, string goodreadsBookId, string artistName, bool? monitored = null)
+        public AuthorResource EnsureArtist(string authorId, string goodreadsBookId, string artistName, bool? monitored = null)
         {
             var result = Artist.All().FirstOrDefault(v => v.ForeignAuthorId == authorId);
 
@@ -259,7 +259,7 @@ namespace NzbDrone.Integration.Test
                 var artist = lookup.First();
                 artist.QualityProfileId = 1;
                 artist.MetadataProfileId = 1;
-                artist.Path = Path.Combine(ArtistRootFolder, artist.ArtistName);
+                artist.Path = Path.Combine(ArtistRootFolder, artist.AuthorName);
                 artist.Monitored = true;
                 artist.AddOptions = new Core.Books.AddAuthorOptions();
                 Directory.CreateDirectory(artist.Path);
@@ -275,7 +275,7 @@ namespace NzbDrone.Integration.Test
             {
                 changed = true;
                 result.RootFolderPath = ArtistRootFolder;
-                result.Path = Path.Combine(ArtistRootFolder, result.ArtistName);
+                result.Path = Path.Combine(ArtistRootFolder, result.AuthorName);
             }
 
             if (monitored.HasValue)
@@ -305,14 +305,14 @@ namespace NzbDrone.Integration.Test
             }
         }
 
-        public void EnsureTrackFile(ArtistResource artist, int bookId, Quality quality)
+        public void EnsureTrackFile(AuthorResource artist, int bookId, Quality quality)
         {
             var result = Albums.GetAlbumsInArtist(artist.Id).Single(v => v.Id == bookId);
 
             // if (result.BookFile == null)
             if (true)
             {
-                var path = Path.Combine(ArtistRootFolder, artist.ArtistName, "Track.mp3");
+                var path = Path.Combine(ArtistRootFolder, artist.AuthorName, "Track.mp3");
 
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, "Fake Track");

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
 
-namespace Readarr.Api.V1.TrackFiles
+namespace Readarr.Api.V1.BookFiles
 {
-    public class TrackFileListResource
+    public class BookFileListResource
     {
-        public List<int> TrackFileIds { get; set; }
+        public List<int> BookFileIds { get; set; }
         public QualityModel Quality { get; set; }
     }
 }

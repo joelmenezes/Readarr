@@ -5,14 +5,14 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using Readarr.Http;
 
-namespace Readarr.Api.V1.Artist
+namespace Readarr.Api.V1.Author
 {
-    public class ArtistLookupModule : ReadarrRestModule<ArtistResource>
+    public class AuthorLookupModule : ReadarrRestModule<AuthorResource>
     {
         private readonly ISearchForNewAuthor _searchProxy;
 
-        public ArtistLookupModule(ISearchForNewAuthor searchProxy)
-            : base("/artist/lookup")
+        public AuthorLookupModule(ISearchForNewAuthor searchProxy)
+            : base("/author/lookup")
         {
             _searchProxy = searchProxy;
             Get("/", x => Search());
@@ -24,12 +24,12 @@ namespace Readarr.Api.V1.Artist
             return MapToResource(searchResults).ToList();
         }
 
-        private static IEnumerable<ArtistResource> MapToResource(IEnumerable<NzbDrone.Core.Books.Author> artist)
+        private static IEnumerable<AuthorResource> MapToResource(IEnumerable<NzbDrone.Core.Books.Author> author)
         {
-            foreach (var currentArtist in artist)
+            foreach (var currentAuthor in author)
             {
-                var resource = currentArtist.ToResource();
-                var poster = currentArtist.Metadata.Value.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
+                var resource = currentAuthor.ToResource();
+                var poster = currentAuthor.Metadata.Value.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
                 if (poster != null)
                 {
                     resource.RemotePoster = poster.Url;

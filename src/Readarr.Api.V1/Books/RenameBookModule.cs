@@ -3,21 +3,21 @@ using NzbDrone.Core.MediaFiles;
 using Readarr.Http;
 using Readarr.Http.REST;
 
-namespace Readarr.Api.V1.Albums
+namespace Readarr.Api.V1.Books
 {
-    public class RenameTrackModule : ReadarrRestModule<RenameTrackResource>
+    public class RenameBookModule : ReadarrRestModule<RenameBookResource>
     {
-        private readonly IRenameTrackFileService _renameTrackFileService;
+        private readonly IRenameBookFileService _renameBookFileService;
 
-        public RenameTrackModule(IRenameTrackFileService renameTrackFileService)
+        public RenameBookModule(IRenameBookFileService renameBookFileService)
             : base("rename")
         {
-            _renameTrackFileService = renameTrackFileService;
+            _renameBookFileService = renameBookFileService;
 
-            GetResourceAll = GetTracks;
+            GetResourceAll = GetBookFiles;
         }
 
-        private List<RenameTrackResource> GetTracks()
+        private List<RenameBookResource> GetBookFiles()
         {
             int authorId;
 
@@ -33,10 +33,10 @@ namespace Readarr.Api.V1.Albums
             if (Request.Query.bookId.HasValue)
             {
                 var bookId = (int)Request.Query.bookId;
-                return _renameTrackFileService.GetRenamePreviews(authorId, bookId).ToResource();
+                return _renameBookFileService.GetRenamePreviews(authorId, bookId).ToResource();
             }
 
-            return _renameTrackFileService.GetRenamePreviews(authorId).ToResource();
+            return _renameBookFileService.GetRenamePreviews(authorId).ToResource();
         }
     }
 }

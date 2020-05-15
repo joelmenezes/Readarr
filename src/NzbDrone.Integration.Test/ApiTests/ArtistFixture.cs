@@ -20,7 +20,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             artist.QualityProfileId = 1;
             artist.MetadataProfileId = 1;
-            artist.Path = Path.Combine(ArtistRootFolder, artist.ArtistName);
+            artist.Path = Path.Combine(ArtistRootFolder, artist.AuthorName);
             artist.Tags = new HashSet<int>();
             artist.Tags.Add(tag.Id);
 
@@ -40,7 +40,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var artist = Artist.Lookup("readarr:1").Single();
 
-            artist.Path = Path.Combine(ArtistRootFolder, artist.ArtistName);
+            artist.Path = Path.Combine(ArtistRootFolder, artist.AuthorName);
 
             Artist.InvalidPost(artist);
         }
@@ -70,7 +70,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             artist.QualityProfileId = 1;
             artist.MetadataProfileId = 1;
-            artist.Path = Path.Combine(ArtistRootFolder, artist.ArtistName);
+            artist.Path = Path.Combine(ArtistRootFolder, artist.AuthorName);
 
             var result = Artist.Post(artist);
 
@@ -78,7 +78,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             result.Id.Should().NotBe(0);
             result.QualityProfileId.Should().Be(1);
             result.MetadataProfileId.Should().Be(1);
-            result.Path.Should().Be(Path.Combine(ArtistRootFolder, artist.ArtistName));
+            result.Path.Should().Be(Path.Combine(ArtistRootFolder, artist.AuthorName));
         }
 
         [Test]

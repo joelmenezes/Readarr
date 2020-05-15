@@ -7,30 +7,30 @@ using NzbDrone.Core.Books;
 using NzbDrone.Core.MediaCover;
 using Readarr.Http.REST;
 
-namespace Readarr.Api.V1.Artist
+namespace Readarr.Api.V1.Author
 {
-    public class ArtistResource : RestResource
+    public class AuthorResource : RestResource
     {
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
         //Todo: We should get the entire Profile instead of ID and Name separately
         [JsonIgnore]
-        public int ArtistMetadataId { get; set; }
+        public int AuthorMetadataId { get; set; }
         public AuthorStatusType Status { get; set; }
 
         public bool Ended => Status == AuthorStatusType.Ended;
 
-        public string ArtistName { get; set; }
+        public string AuthorName { get; set; }
         public string ForeignAuthorId { get; set; }
         public int GoodreadsId { get; set; }
         public string TitleSlug { get; set; }
         public string Overview { get; set; }
-        public string ArtistType { get; set; }
+        public string AuthorType { get; set; }
         public string Disambiguation { get; set; }
         public List<Links> Links { get; set; }
 
-        public Book NextAlbum { get; set; }
-        public Book LastAlbum { get; set; }
+        public Book NextBook { get; set; }
+        public Book LastBook { get; set; }
 
         public List<MediaCover> Images { get; set; }
 
@@ -42,7 +42,6 @@ namespace Readarr.Api.V1.Artist
         public int MetadataProfileId { get; set; }
 
         //Editing Only
-        public bool AlbumFolder { get; set; }
         public bool Monitored { get; set; }
 
         public string RootFolderPath { get; set; }
@@ -54,31 +53,31 @@ namespace Readarr.Api.V1.Artist
         public AddAuthorOptions AddOptions { get; set; }
         public Ratings Ratings { get; set; }
 
-        public ArtistStatisticsResource Statistics { get; set; }
+        public AuthorStatisticsResource Statistics { get; set; }
     }
 
-    public static class ArtistResourceMapper
+    public static class AuthorResourceMapper
     {
-        public static ArtistResource ToResource(this NzbDrone.Core.Books.Author model)
+        public static AuthorResource ToResource(this NzbDrone.Core.Books.Author model)
         {
             if (model == null)
             {
                 return null;
             }
 
-            return new ArtistResource
+            return new AuthorResource
             {
                 Id = model.Id,
-                ArtistMetadataId = model.AuthorMetadataId,
+                AuthorMetadataId = model.AuthorMetadataId,
 
-                ArtistName = model.Name,
+                AuthorName = model.Name,
 
                 //AlternateTitles
                 SortName = model.SortName,
 
                 Status = model.Metadata.Value.Status,
                 Overview = model.Metadata.Value.Overview,
-                ArtistType = model.Metadata.Value.Type,
+                AuthorType = model.Metadata.Value.Type,
                 Disambiguation = model.Metadata.Value.Disambiguation,
 
                 Images = model.Metadata.Value.Images.JsonClone(),
@@ -103,11 +102,11 @@ namespace Readarr.Api.V1.Artist
                 AddOptions = model.AddOptions,
                 Ratings = model.Metadata.Value.Ratings,
 
-                Statistics = new ArtistStatisticsResource()
+                Statistics = new AuthorStatisticsResource()
             };
         }
 
-        public static NzbDrone.Core.Books.Author ToModel(this ArtistResource resource)
+        public static NzbDrone.Core.Books.Author ToModel(this AuthorResource resource)
         {
             if (resource == null)
             {
@@ -123,14 +122,14 @@ namespace Readarr.Api.V1.Artist
                     ForeignAuthorId = resource.ForeignAuthorId,
                     GoodreadsId = resource.GoodreadsId,
                     TitleSlug = resource.TitleSlug,
-                    Name = resource.ArtistName,
+                    Name = resource.AuthorName,
                     Status = resource.Status,
                     Overview = resource.Overview,
                     Links = resource.Links,
                     Images = resource.Images,
                     Genres = resource.Genres,
                     Ratings = resource.Ratings,
-                    Type = resource.ArtistType
+                    Type = resource.AuthorType
                 },
 
                 //AlternateTitles
@@ -150,21 +149,21 @@ namespace Readarr.Api.V1.Artist
             };
         }
 
-        public static NzbDrone.Core.Books.Author ToModel(this ArtistResource resource, NzbDrone.Core.Books.Author artist)
+        public static NzbDrone.Core.Books.Author ToModel(this AuthorResource resource, NzbDrone.Core.Books.Author author)
         {
-            var updatedArtist = resource.ToModel();
+            var updatedAuthor = resource.ToModel();
 
-            artist.ApplyChanges(updatedArtist);
+            author.ApplyChanges(updatedAuthor);
 
-            return artist;
+            return author;
         }
 
-        public static List<ArtistResource> ToResource(this IEnumerable<NzbDrone.Core.Books.Author> artist)
+        public static List<AuthorResource> ToResource(this IEnumerable<NzbDrone.Core.Books.Author> author)
         {
-            return artist.Select(ToResource).ToList();
+            return author.Select(ToResource).ToList();
         }
 
-        public static List<NzbDrone.Core.Books.Author> ToModel(this IEnumerable<ArtistResource> resources)
+        public static List<NzbDrone.Core.Books.Author> ToModel(this IEnumerable<AuthorResource> resources)
         {
             return resources.Select(ToModel).ToList();
         }

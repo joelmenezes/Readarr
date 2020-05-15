@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Readarr.Api.V1.Artist
+namespace Readarr.Api.V1.Author
 {
-    public class ArtistEditorDeleteResource
+    public class AuthorEditorDeleteResource
     {
         public List<int> AuthorIds { get; set; }
         public bool DeleteFiles { get; set; }

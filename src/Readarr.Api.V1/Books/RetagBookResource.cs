@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Readarr.Http.REST;
 
-namespace Readarr.Api.V1.Albums
+namespace Readarr.Api.V1.Books
 {
     public class TagDifference
     {
@@ -11,31 +11,31 @@ namespace Readarr.Api.V1.Albums
         public string NewValue { get; set; }
     }
 
-    public class RetagTrackResource : RestResource
+    public class RetagBookResource : RestResource
     {
         public int AuthorId { get; set; }
         public int BookId { get; set; }
         public List<int> TrackNumbers { get; set; }
-        public int TrackFileId { get; set; }
+        public int BookFileId { get; set; }
         public string Path { get; set; }
         public List<TagDifference> Changes { get; set; }
     }
 
     public static class RetagTrackResourceMapper
     {
-        public static RetagTrackResource ToResource(this NzbDrone.Core.MediaFiles.RetagBookFilePreview model)
+        public static RetagBookResource ToResource(this NzbDrone.Core.MediaFiles.RetagBookFilePreview model)
         {
             if (model == null)
             {
                 return null;
             }
 
-            return new RetagTrackResource
+            return new RetagBookResource
             {
                 AuthorId = model.AuthorId,
                 BookId = model.BookId,
                 TrackNumbers = model.TrackNumbers.ToList(),
-                TrackFileId = model.BookFileId,
+                BookFileId = model.BookFileId,
                 Path = model.Path,
                 Changes = model.Changes.Select(x => new TagDifference
                 {
@@ -46,7 +46,7 @@ namespace Readarr.Api.V1.Albums
             };
         }
 
-        public static List<RetagTrackResource> ToResource(this IEnumerable<NzbDrone.Core.MediaFiles.RetagBookFilePreview> models)
+        public static List<RetagBookResource> ToResource(this IEnumerable<NzbDrone.Core.MediaFiles.RetagBookFilePreview> models)
         {
             return models.Select(ToResource).ToList();
         }

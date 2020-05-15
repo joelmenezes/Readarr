@@ -1,4 +1,4 @@
-namespace Readarr.Api.V1.Artist
+namespace Readarr.Api.V1.Author
 {
     public class AlternateTitleResource
     {

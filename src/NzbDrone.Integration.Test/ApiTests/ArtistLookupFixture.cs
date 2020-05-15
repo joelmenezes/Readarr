@@ -13,7 +13,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             var artist = Artist.Lookup(term);
 
             artist.Should().NotBeEmpty();
-            artist.Should().Contain(c => c.ArtistName == name);
+            artist.Should().Contain(c => c.AuthorName == name);
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             var artist = Artist.Lookup("readarr:1");
 
             artist.Should().NotBeEmpty();
-            artist.Should().Contain(c => c.ArtistName == "J.K. Rowling");
+            artist.Should().Contain(c => c.AuthorName == "J.K. Rowling");
         }
     }
 }

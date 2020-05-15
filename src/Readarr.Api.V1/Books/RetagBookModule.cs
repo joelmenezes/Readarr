@@ -4,21 +4,21 @@ using NzbDrone.Core.MediaFiles;
 using Readarr.Http;
 using Readarr.Http.REST;
 
-namespace Readarr.Api.V1.Albums
+namespace Readarr.Api.V1.Books
 {
-    public class RetagTrackModule : ReadarrRestModule<RetagTrackResource>
+    public class RetagBookModule : ReadarrRestModule<RetagBookResource>
     {
         private readonly IAudioTagService _audioTagService;
 
-        public RetagTrackModule(IAudioTagService audioTagService)
+        public RetagBookModule(IAudioTagService audioTagService)
             : base("retag")
         {
             _audioTagService = audioTagService;
 
-            GetResourceAll = GetTracks;
+            GetResourceAll = GetBooks;
         }
 
-        private List<RetagTrackResource> GetTracks()
+        private List<RetagBookResource> GetBooks()
         {
             if (Request.Query.bookId.HasValue)
             {

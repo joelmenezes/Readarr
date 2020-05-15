@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using NzbDrone.Core.Books;
 
-namespace Readarr.Api.V1.AlbumStudio
+namespace Readarr.Api.V1.Bookshelf
 {
-    public class AlbumStudioResource
+    public class BookshelfResource
     {
-        public List<AlbumStudioArtistResource> Artist { get; set; }
+        public List<BookshelfAuthorResource> Authors { get; set; }
         public MonitoringOptions MonitoringOptions { get; set; }
     }
 }

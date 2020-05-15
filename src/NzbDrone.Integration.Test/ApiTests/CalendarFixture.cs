@@ -4,20 +4,20 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Integration.Test.Client;
-using Readarr.Api.V1.Albums;
+using Readarr.Api.V1.Books;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
     public class CalendarFixture : IntegrationTest
     {
-        public ClientBase<AlbumResource> Calendar;
+        public ClientBase<BookResource> Calendar;
 
         protected override void InitRestClients()
         {
             base.InitRestClients();
 
-            Calendar = new ClientBase<AlbumResource>(RestClient, ApiKey, "calendar");
+            Calendar = new ClientBase<BookResource>(RestClient, ApiKey, "calendar");
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             var request = Calendar.BuildRequest();
             request.AddParameter("start", new DateTime(2003, 06, 20).ToString("s") + "Z");
             request.AddParameter("end", new DateTime(2003, 06, 22).ToString("s") + "Z");
-            var items = Calendar.Get<List<AlbumResource>>(request);
+            var items = Calendar.Get<List<BookResource>>(request);
 
             items = items.Where(v => v.AuthorId == artist.Id).ToList();
 
@@ -45,7 +45,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             request.AddParameter("start", new DateTime(2003, 06, 20).ToString("s") + "Z");
             request.AddParameter("end", new DateTime(2003, 06, 22).ToString("s") + "Z");
             request.AddParameter("unmonitored", "false");
-            var items = Calendar.Get<List<AlbumResource>>(request);
+            var items = Calendar.Get<List<BookResource>>(request);
 
             items = items.Where(v => v.AuthorId == artist.Id).ToList();
 
@@ -61,7 +61,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             request.AddParameter("start", new DateTime(2003, 06, 20).ToString("s") + "Z");
             request.AddParameter("end", new DateTime(2003, 06, 22).ToString("s") + "Z");
             request.AddParameter("unmonitored", "true");
-            var items = Calendar.Get<List<AlbumResource>>(request);
+            var items = Calendar.Get<List<BookResource>>(request);
 
             items = items.Where(v => v.AuthorId == artist.Id).ToList();
 

@@ -1,12 +1,11 @@
 using NzbDrone.Core.AuthorStats;
 
-namespace Readarr.Api.V1.Artist
+namespace Readarr.Api.V1.Books
 {
-    public class ArtistStatisticsResource
+    public class BookStatisticsResource
     {
-        public int BookCount { get; set; }
         public int BookFileCount { get; set; }
-        public int TrackCount { get; set; }
+        public int BookCount { get; set; }
         public int TotalTrackCount { get; set; }
         public long SizeOnDisk { get; set; }
 
@@ -14,29 +13,29 @@ namespace Readarr.Api.V1.Artist
         {
             get
             {
-                if (TrackCount == 0)
+                if (BookCount == 0)
                 {
                     return 0;
                 }
 
-                return BookFileCount / (decimal)TrackCount * 100;
+                return BookFileCount / (decimal)BookCount * 100;
             }
         }
     }
 
-    public static class ArtistStatisticsResourceMapper
+    public static class BookStatisticsResourceMapper
     {
-        public static ArtistStatisticsResource ToResource(this AuthorStatistics model)
+        public static BookStatisticsResource ToResource(this BookStatistics model)
         {
             if (model == null)
             {
                 return null;
             }
 
-            return new ArtistStatisticsResource
+            return new BookStatisticsResource
             {
-                BookCount = model.BookCount,
                 BookFileCount = model.BookFileCount,
+                BookCount = model.BookCount,
                 SizeOnDisk = model.SizeOnDisk
             };
         }

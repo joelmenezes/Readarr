@@ -4,13 +4,13 @@ using System.Linq;
 using Newtonsoft.Json;
 using NzbDrone.Core.Books;
 using NzbDrone.Core.MediaCover;
-using Readarr.Api.V1.Artist;
-using Readarr.Api.V1.TrackFiles;
+using Readarr.Api.V1.Author;
+using Readarr.Api.V1.BookFiles;
 using Readarr.Http.REST;
 
-namespace Readarr.Api.V1.Albums
+namespace Readarr.Api.V1.Books
 {
-    public class AlbumResource : RestResource
+    public class BookResource : RestResource
     {
         public string Title { get; set; }
         public string Disambiguation { get; set; }
@@ -27,10 +27,10 @@ namespace Readarr.Api.V1.Albums
         public Ratings Ratings { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public List<string> Genres { get; set; }
-        public ArtistResource Artist { get; set; }
+        public AuthorResource Author { get; set; }
         public List<MediaCover> Images { get; set; }
         public List<Links> Links { get; set; }
-        public AlbumStatisticsResource Statistics { get; set; }
+        public BookStatisticsResource Statistics { get; set; }
         public AddBookOptions AddOptions { get; set; }
         public string RemoteCover { get; set; }
 
@@ -39,16 +39,16 @@ namespace Readarr.Api.V1.Albums
         public bool Grabbed { get; set; }
     }
 
-    public static class AlbumResourceMapper
+    public static class BookResourceMapper
     {
-        public static AlbumResource ToResource(this Book model)
+        public static BookResource ToResource(this Book model)
         {
             if (model == null)
             {
                 return null;
             }
 
-            return new AlbumResource
+            return new BookResource
             {
                 Id = model.Id,
                 AuthorId = model.AuthorId,
@@ -68,18 +68,18 @@ namespace Readarr.Api.V1.Albums
                 Images = model.Images,
                 Links = model.Links,
                 Ratings = model.Ratings,
-                Artist = model.Author?.Value.ToResource()
+                Author = model.Author?.Value.ToResource()
             };
         }
 
-        public static Book ToModel(this AlbumResource resource)
+        public static Book ToModel(this BookResource resource)
         {
             if (resource == null)
             {
                 return null;
             }
 
-            var artist = resource.Artist?.ToModel() ?? new NzbDrone.Core.Books.Author();
+            var author = resource.Author?.ToModel() ?? new NzbDrone.Core.Books.Author();
 
             return new Book
             {
@@ -97,26 +97,26 @@ namespace Readarr.Api.V1.Albums
                 Images = resource.Images,
                 Monitored = resource.Monitored,
                 AddOptions = resource.AddOptions,
-                Author = artist,
-                AuthorMetadata = artist.Metadata.Value
+                Author = author,
+                AuthorMetadata = author.Metadata.Value
             };
         }
 
-        public static Book ToModel(this AlbumResource resource, Book album)
+        public static Book ToModel(this BookResource resource, Book book)
         {
-            var updatedAlbum = resource.ToModel();
+            var updatedBook = resource.ToModel();
 
-            album.ApplyChanges(updatedAlbum);
+            book.ApplyChanges(updatedBook);
 
-            return album;
+            return book;
         }
 
-        public static List<AlbumResource> ToResource(this IEnumerable<Book> models)
+        public static List<BookResource> ToResource(this IEnumerable<Book> models)
         {
             return models?.Select(ToResource).ToList();
         }
 
-        public static List<Book> ToModel(this IEnumerable<AlbumResource> resources)
+        public static List<Book> ToModel(this IEnumerable<BookResource> resources)
         {
             return resources.Select(ToModel).ToList();
         }

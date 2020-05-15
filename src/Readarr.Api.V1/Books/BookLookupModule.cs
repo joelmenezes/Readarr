@@ -5,14 +5,14 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using Readarr.Http;
 
-namespace Readarr.Api.V1.Albums
+namespace Readarr.Api.V1.Books
 {
-    public class AlbumLookupModule : ReadarrRestModule<AlbumResource>
+    public class BookLookupModule : ReadarrRestModule<BookResource>
     {
         private readonly ISearchForNewBook _searchProxy;
 
-        public AlbumLookupModule(ISearchForNewBook searchProxy)
-            : base("/album/lookup")
+        public BookLookupModule(ISearchForNewBook searchProxy)
+            : base("/book/lookup")
         {
             _searchProxy = searchProxy;
             Get("/", x => Search());
@@ -24,12 +24,12 @@ namespace Readarr.Api.V1.Albums
             return MapToResource(searchResults).ToList();
         }
 
-        private static IEnumerable<AlbumResource> MapToResource(IEnumerable<NzbDrone.Core.Books.Book> albums)
+        private static IEnumerable<BookResource> MapToResource(IEnumerable<NzbDrone.Core.Books.Book> books)
         {
-            foreach (var currentAlbum in albums)
+            foreach (var currentBook in books)
             {
-                var resource = currentAlbum.ToResource();
-                var cover = currentAlbum.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Cover);
+                var resource = currentBook.ToResource();
+                var cover = currentBook.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Cover);
                 if (cover != null)
                 {
                     resource.RemoteCover = cover.Url;

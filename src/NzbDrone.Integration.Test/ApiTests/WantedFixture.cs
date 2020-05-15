@@ -54,8 +54,8 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var result = WantedMissing.GetPaged(0, 15, "releaseDate", "desc");
 
-            result.Records.First().Artist.Should().NotBeNull();
-            result.Records.First().Artist.ArtistName.Should().Be("J.K. Rowling");
+            result.Records.First().Author.Should().NotBeNull();
+            result.Records.First().Author.AuthorName.Should().Be("J.K. Rowling");
         }
 
         [Test]
@@ -105,8 +105,8 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var result = WantedCutoffUnmet.GetPaged(0, 15, "releaseDate", "desc");
 
-            result.Records.First().Artist.Should().NotBeNull();
-            result.Records.First().Artist.ArtistName.Should().Be("J.K. Rowling");
+            result.Records.First().Author.Should().NotBeNull();
+            result.Records.First().Author.AuthorName.Should().Be("J.K. Rowling");
         }
 
         [Test]

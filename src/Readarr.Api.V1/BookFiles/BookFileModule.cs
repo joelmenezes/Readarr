@@ -14,9 +14,9 @@ using Readarr.Http;
 using Readarr.Http.Extensions;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
-namespace Readarr.Api.V1.TrackFiles
+namespace Readarr.Api.V1.BookFiles
 {
-    public class TrackFileModule : ReadarrRestModuleWithSignalR<TrackFileResource, BookFile>,
+    public class BookFileModule : ReadarrRestModuleWithSignalR<BookFileResource, BookFile>,
                                  IHandle<BookFileAddedEvent>,
                                  IHandle<BookFileDeletedEvent>
     {
@@ -27,7 +27,7 @@ namespace Readarr.Api.V1.TrackFiles
         private readonly IBookService _bookService;
         private readonly IUpgradableSpecification _upgradableSpecification;
 
-        public TrackFileModule(IBroadcastSignalRMessage signalRBroadcaster,
+        public BookFileModule(IBroadcastSignalRMessage signalRBroadcaster,
                                IMediaFileService mediaFileService,
                                IDeleteMediaFiles mediaFileDeletionService,
                                IAudioTagService audioTagService,
@@ -43,44 +43,44 @@ namespace Readarr.Api.V1.TrackFiles
             _bookService = bookService;
             _upgradableSpecification = upgradableSpecification;
 
-            GetResourceById = GetTrackFile;
-            GetResourceAll = GetTrackFiles;
+            GetResourceById = GetBookFile;
+            GetResourceAll = GetBookFiles;
             UpdateResource = SetQuality;
-            DeleteResource = DeleteTrackFile;
+            DeleteResource = DeleteBookFile;
 
             Put("/editor", trackFiles => SetQuality());
-            Delete("/bulk", trackFiles => DeleteTrackFiles());
+            Delete("/bulk", trackFiles => DeleteBookFiles());
         }
 
-        private TrackFileResource MapToResource(BookFile trackFile)
+        private BookFileResource MapToResource(BookFile bookFile)
         {
-            if (trackFile.BookId > 0 && trackFile.Author != null && trackFile.Author.Value != null)
+            if (bookFile.BookId > 0 && bookFile.Author != null && bookFile.Author.Value != null)
             {
-                return trackFile.ToResource(trackFile.Author.Value, _upgradableSpecification);
+                return bookFile.ToResource(bookFile.Author.Value, _upgradableSpecification);
             }
             else
             {
-                return trackFile.ToResource();
+                return bookFile.ToResource();
             }
         }
 
-        private TrackFileResource GetTrackFile(int id)
+        private BookFileResource GetBookFile(int id)
         {
             var resource = MapToResource(_mediaFileService.Get(id));
             resource.AudioTags = _audioTagService.ReadTags(resource.Path);
             return resource;
         }
 
-        private List<TrackFileResource> GetTrackFiles()
+        private List<BookFileResource> GetBookFiles()
         {
             var authorIdQuery = Request.Query.AuthorId;
-            var trackFileIdsQuery = Request.Query.TrackFileIds;
+            var bookFileIdsQuery = Request.Query.TrackFileIds;
             var bookIdQuery = Request.Query.BookId;
             var unmappedQuery = Request.Query.Unmapped;
 
-            if (!authorIdQuery.HasValue && !trackFileIdsQuery.HasValue && !bookIdQuery.HasValue && !unmappedQuery.HasValue)
+            if (!authorIdQuery.HasValue && !bookFileIdsQuery.HasValue && !bookIdQuery.HasValue && !unmappedQuery.HasValue)
             {
-                throw new Readarr.Http.REST.BadRequestException("authorId, bookId, trackFileIds or unmapped must be provided");
+                throw new Readarr.Http.REST.BadRequestException("authorId, bookId, bookFileIds or unmapped must be provided");
             }
 
             if (unmappedQuery.HasValue && Convert.ToBoolean(unmappedQuery.Value))
@@ -92,9 +92,9 @@ namespace Readarr.Api.V1.TrackFiles
             if (authorIdQuery.HasValue && !bookIdQuery.HasValue)
             {
                 int authorId = Convert.ToInt32(authorIdQuery.Value);
-                var artist = _authorService.GetAuthor(authorId);
+                var author = _authorService.GetAuthor(authorId);
 
-                return _mediaFileService.GetFilesByAuthor(authorId).ConvertAll(f => f.ToResource(artist, _upgradableSpecification));
+                return _mediaFileService.GetFilesByAuthor(authorId).ConvertAll(f => f.ToResource(author, _upgradableSpecification));
             }
 
             if (bookIdQuery.HasValue)
@@ -105,84 +105,84 @@ namespace Readarr.Api.V1.TrackFiles
                     .Select(e => Convert.ToInt32(e))
                     .ToList();
 
-                var result = new List<TrackFileResource>();
+                var result = new List<BookFileResource>();
                 foreach (var bookId in bookIds)
                 {
-                    var album = _bookService.GetBook(bookId);
-                    var albumArtist = _authorService.GetAuthor(album.AuthorId);
-                    result.AddRange(_mediaFileService.GetFilesByBook(album.Id).ConvertAll(f => f.ToResource(albumArtist, _upgradableSpecification)));
+                    var book = _bookService.GetBook(bookId);
+                    var bookAuthor = _authorService.GetAuthor(book.AuthorId);
+                    result.AddRange(_mediaFileService.GetFilesByBook(book.Id).ConvertAll(f => f.ToResource(bookAuthor, _upgradableSpecification)));
                 }
 
                 return result;
             }
             else
             {
-                string trackFileIdsValue = trackFileIdsQuery.Value.ToString();
+                string bookFileIdsValue = bookFileIdsQuery.Value.ToString();
 
-                var trackFileIds = trackFileIdsValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                var bookFileIds = bookFileIdsValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                                                         .Select(e => Convert.ToInt32(e))
                                                         .ToList();
 
                 // trackfiles will come back with the artist already populated
-                var trackFiles = _mediaFileService.Get(trackFileIds);
-                return trackFiles.ConvertAll(e => MapToResource(e));
+                var bookFiles = _mediaFileService.Get(bookFileIds);
+                return bookFiles.ConvertAll(e => MapToResource(e));
             }
         }
 
-        private void SetQuality(TrackFileResource trackFileResource)
+        private void SetQuality(BookFileResource bookFileResource)
         {
-            var trackFile = _mediaFileService.Get(trackFileResource.Id);
-            trackFile.Quality = trackFileResource.Quality;
-            _mediaFileService.Update(trackFile);
+            var bookFile = _mediaFileService.Get(bookFileResource.Id);
+            bookFile.Quality = bookFileResource.Quality;
+            _mediaFileService.Update(bookFile);
         }
 
         private object SetQuality()
         {
-            var resource = Request.Body.FromJson<TrackFileListResource>();
-            var trackFiles = _mediaFileService.Get(resource.TrackFileIds);
+            var resource = Request.Body.FromJson<BookFileListResource>();
+            var bookFiles = _mediaFileService.Get(resource.BookFileIds);
 
-            foreach (var trackFile in trackFiles)
+            foreach (var bookFile in bookFiles)
             {
                 if (resource.Quality != null)
                 {
-                    trackFile.Quality = resource.Quality;
+                    bookFile.Quality = resource.Quality;
                 }
             }
 
-            _mediaFileService.Update(trackFiles);
+            _mediaFileService.Update(bookFiles);
 
-            return ResponseWithCode(trackFiles.ConvertAll(f => f.ToResource(trackFiles.First().Author.Value, _upgradableSpecification)),
+            return ResponseWithCode(bookFiles.ConvertAll(f => f.ToResource(bookFiles.First().Author.Value, _upgradableSpecification)),
                                Nancy.HttpStatusCode.Accepted);
         }
 
-        private void DeleteTrackFile(int id)
+        private void DeleteBookFile(int id)
         {
-            var trackFile = _mediaFileService.Get(id);
+            var bookFile = _mediaFileService.Get(id);
 
-            if (trackFile == null)
+            if (bookFile == null)
             {
-                throw new NzbDroneClientException(HttpStatusCode.NotFound, "Track file not found");
+                throw new NzbDroneClientException(HttpStatusCode.NotFound, "Book file not found");
             }
 
-            if (trackFile.BookId > 0 && trackFile.Author != null && trackFile.Author.Value != null)
+            if (bookFile.BookId > 0 && bookFile.Author != null && bookFile.Author.Value != null)
             {
-                _mediaFileDeletionService.DeleteTrackFile(trackFile.Author.Value, trackFile);
+                _mediaFileDeletionService.DeleteTrackFile(bookFile.Author.Value, bookFile);
             }
             else
             {
-                _mediaFileDeletionService.DeleteTrackFile(trackFile, "Unmapped_Files");
+                _mediaFileDeletionService.DeleteTrackFile(bookFile, "Unmapped_Files");
             }
         }
 
-        private object DeleteTrackFiles()
+        private object DeleteBookFiles()
         {
-            var resource = Request.Body.FromJson<TrackFileListResource>();
-            var trackFiles = _mediaFileService.Get(resource.TrackFileIds);
-            var artist = trackFiles.First().Author.Value;
+            var resource = Request.Body.FromJson<BookFileListResource>();
+            var bookFiles = _mediaFileService.Get(resource.BookFileIds);
+            var author = bookFiles.First().Author.Value;
 
-            foreach (var trackFile in trackFiles)
+            foreach (var bookFile in bookFiles)
             {
-                _mediaFileDeletionService.DeleteTrackFile(artist, trackFile);
+                _mediaFileDeletionService.DeleteTrackFile(author, bookFile);
             }
 
             return new object();

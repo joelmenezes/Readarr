@@ -19,9 +19,9 @@ using NzbDrone.SignalR;
 using Readarr.Http;
 using Readarr.Http.Extensions;
 
-namespace Readarr.Api.V1.Artist
+namespace Readarr.Api.V1.Author
 {
-    public class ArtistModule : ReadarrRestModuleWithSignalR<ArtistResource, NzbDrone.Core.Books.Author>,
+    public class AuthorModule : ReadarrRestModuleWithSignalR<AuthorResource, NzbDrone.Core.Books.Author>,
                                 IHandle<BookImportedEvent>,
                                 IHandle<BookEditedEvent>,
                                 IHandle<BookFileDeletedEvent>,
@@ -34,24 +34,24 @@ namespace Readarr.Api.V1.Artist
         private readonly IAuthorService _authorService;
         private readonly IBookService _bookService;
         private readonly IAddAuthorService _addAuthorService;
-        private readonly IAuthorStatisticsService _artistStatisticsService;
+        private readonly IAuthorStatisticsService _authorStatisticsService;
         private readonly IMapCoversToLocal _coverMapper;
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly IRootFolderService _rootFolderService;
 
-        public ArtistModule(IBroadcastSignalRMessage signalRBroadcaster,
+        public AuthorModule(IBroadcastSignalRMessage signalRBroadcaster,
                             IAuthorService authorService,
                             IBookService bookService,
                             IAddAuthorService addAuthorService,
-                            IAuthorStatisticsService artistStatisticsService,
+                            IAuthorStatisticsService authorStatisticsService,
                             IMapCoversToLocal coverMapper,
                             IManageCommandQueue commandQueueManager,
                             IRootFolderService rootFolderService,
                             RootFolderValidator rootFolderValidator,
                             MappedNetworkDriveValidator mappedNetworkDriveValidator,
-                            AuthorPathValidator artistPathValidator,
-                            ArtistExistsValidator artistExistsValidator,
-                            AuthorAncestorValidator artistAncestorValidator,
+                            AuthorPathValidator authorPathValidator,
+                            AuthorExistsValidator authorExistsValidator,
+                            AuthorAncestorValidator authorAncestorValidator,
                             SystemFolderValidator systemFolderValidator,
                             QualityProfileExistsValidator qualityProfileExistsValidator,
                             MetadataProfileExistsValidator metadataProfileExistsValidator)
@@ -60,17 +60,17 @@ namespace Readarr.Api.V1.Artist
             _authorService = authorService;
             _bookService = bookService;
             _addAuthorService = addAuthorService;
-            _artistStatisticsService = artistStatisticsService;
+            _authorStatisticsService = authorStatisticsService;
 
             _coverMapper = coverMapper;
             _commandQueueManager = commandQueueManager;
             _rootFolderService = rootFolderService;
 
-            GetResourceAll = AllArtists;
-            GetResourceById = GetArtist;
-            CreateResource = AddArtist;
-            UpdateResource = UpdateArtist;
-            DeleteResource = DeleteArtist;
+            GetResourceAll = AllAuthors;
+            GetResourceById = GetAuthor;
+            CreateResource = AddAuthor;
+            UpdateResource = UpdateAuthor;
+            DeleteResource = DeleteAuthor;
 
             Http.Validation.RuleBuilderExtensions.ValidId(SharedValidator.RuleFor(s => s.QualityProfileId));
             Http.Validation.RuleBuilderExtensions.ValidId(SharedValidator.RuleFor(s => s.MetadataProfileId));
@@ -80,8 +80,8 @@ namespace Readarr.Api.V1.Artist
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
                            .SetValidator(mappedNetworkDriveValidator)
-                           .SetValidator(artistPathValidator)
-                           .SetValidator(artistAncestorValidator)
+                           .SetValidator(authorPathValidator)
+                           .SetValidator(authorAncestorValidator)
                            .SetValidator(systemFolderValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());
 
@@ -90,26 +90,26 @@ namespace Readarr.Api.V1.Artist
 
             PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => s.RootFolderPath.IsNullOrWhiteSpace());
             PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => s.Path.IsNullOrWhiteSpace());
-            PostValidator.RuleFor(s => s.ArtistName).NotEmpty();
-            PostValidator.RuleFor(s => s.ForeignAuthorId).NotEmpty().SetValidator(artistExistsValidator);
+            PostValidator.RuleFor(s => s.AuthorName).NotEmpty();
+            PostValidator.RuleFor(s => s.ForeignAuthorId).NotEmpty().SetValidator(authorExistsValidator);
 
             PutValidator.RuleFor(s => s.Path).IsValidPath();
         }
 
-        private ArtistResource GetArtist(int id)
+        private AuthorResource GetAuthor(int id)
         {
-            var artist = _authorService.GetAuthor(id);
-            return GetArtistResource(artist);
+            var author = _authorService.GetAuthor(id);
+            return GetArtistResource(author);
         }
 
-        private ArtistResource GetArtistResource(NzbDrone.Core.Books.Author artist)
+        private AuthorResource GetArtistResource(NzbDrone.Core.Books.Author author)
         {
-            if (artist == null)
+            if (author == null)
             {
                 return null;
             }
 
-            var resource = artist.ToResource();
+            var resource = author.ToResource();
             MapCoversToLocal(resource);
             FetchAndLinkArtistStatistics(resource);
             LinkNextPreviousAlbums(resource);
@@ -120,53 +120,53 @@ namespace Readarr.Api.V1.Artist
             return resource;
         }
 
-        private List<ArtistResource> AllArtists()
+        private List<AuthorResource> AllAuthors()
         {
-            var artistStats = _artistStatisticsService.AuthorStatistics();
-            var artistsResources = _authorService.GetAllAuthors().ToResource();
+            var authorStats = _authorStatisticsService.AuthorStatistics();
+            var authorResources = _authorService.GetAllAuthors().ToResource();
 
-            MapCoversToLocal(artistsResources.ToArray());
-            LinkNextPreviousAlbums(artistsResources.ToArray());
-            LinkArtistStatistics(artistsResources, artistStats);
+            MapCoversToLocal(authorResources.ToArray());
+            LinkNextPreviousAlbums(authorResources.ToArray());
+            LinkArtistStatistics(authorResources, authorStats);
 
             //PopulateAlternateTitles(seriesResources);
-            return artistsResources;
+            return authorResources;
         }
 
-        private int AddArtist(ArtistResource artistResource)
+        private int AddAuthor(AuthorResource authorResource)
         {
-            var artist = _addAuthorService.AddAuthor(artistResource.ToModel());
+            var author = _addAuthorService.AddAuthor(authorResource.ToModel());
 
-            return artist.Id;
+            return author.Id;
         }
 
-        private void UpdateArtist(ArtistResource artistResource)
+        private void UpdateAuthor(AuthorResource authorResource)
         {
             var moveFiles = Request.GetBooleanQueryParameter("moveFiles");
-            var artist = _authorService.GetAuthor(artistResource.Id);
+            var author = _authorService.GetAuthor(authorResource.Id);
 
             if (moveFiles)
             {
-                var sourcePath = artist.Path;
-                var destinationPath = artistResource.Path;
+                var sourcePath = author.Path;
+                var destinationPath = authorResource.Path;
 
                 _commandQueueManager.Push(new MoveAuthorCommand
                 {
-                    AuthorId = artist.Id,
+                    AuthorId = author.Id,
                     SourcePath = sourcePath,
                     DestinationPath = destinationPath,
                     Trigger = CommandTrigger.Manual
                 });
             }
 
-            var model = artistResource.ToModel(artist);
+            var model = authorResource.ToModel(author);
 
             _authorService.UpdateAuthor(model);
 
-            BroadcastResourceChange(ModelAction.Updated, artistResource);
+            BroadcastResourceChange(ModelAction.Updated, authorResource);
         }
 
-        private void DeleteArtist(int id)
+        private void DeleteAuthor(int id)
         {
             var deleteFiles = Request.GetBooleanQueryParameter("deleteFiles");
             var addImportListExclusion = Request.GetBooleanQueryParameter("addImportListExclusion");
@@ -174,48 +174,48 @@ namespace Readarr.Api.V1.Artist
             _authorService.DeleteAuthor(id, deleteFiles, addImportListExclusion);
         }
 
-        private void MapCoversToLocal(params ArtistResource[] artists)
+        private void MapCoversToLocal(params AuthorResource[] authors)
         {
-            foreach (var artistResource in artists)
+            foreach (var authorResource in authors)
             {
-                _coverMapper.ConvertToLocalUrls(artistResource.Id, MediaCoverEntity.Author, artistResource.Images);
+                _coverMapper.ConvertToLocalUrls(authorResource.Id, MediaCoverEntity.Author, authorResource.Images);
             }
         }
 
-        private void LinkNextPreviousAlbums(params ArtistResource[] artists)
+        private void LinkNextPreviousAlbums(params AuthorResource[] authors)
         {
-            var nextAlbums = _bookService.GetNextBooksByAuthorMetadataId(artists.Select(x => x.ArtistMetadataId));
-            var lastAlbums = _bookService.GetLastBooksByAuthorMetadataId(artists.Select(x => x.ArtistMetadataId));
+            var nextBooks = _bookService.GetNextBooksByAuthorMetadataId(authors.Select(x => x.AuthorMetadataId));
+            var lastBooks = _bookService.GetLastBooksByAuthorMetadataId(authors.Select(x => x.AuthorMetadataId));
 
-            foreach (var artistResource in artists)
+            foreach (var authorResource in authors)
             {
-                artistResource.NextAlbum = nextAlbums.FirstOrDefault(x => x.AuthorMetadataId == artistResource.ArtistMetadataId);
-                artistResource.LastAlbum = lastAlbums.FirstOrDefault(x => x.AuthorMetadataId == artistResource.ArtistMetadataId);
+                authorResource.NextBook = nextBooks.FirstOrDefault(x => x.AuthorMetadataId == authorResource.AuthorMetadataId);
+                authorResource.LastBook = lastBooks.FirstOrDefault(x => x.AuthorMetadataId == authorResource.AuthorMetadataId);
             }
         }
 
-        private void FetchAndLinkArtistStatistics(ArtistResource resource)
+        private void FetchAndLinkArtistStatistics(AuthorResource resource)
         {
-            LinkArtistStatistics(resource, _artistStatisticsService.AuthorStatistics(resource.Id));
+            LinkArtistStatistics(resource, _authorStatisticsService.AuthorStatistics(resource.Id));
         }
 
-        private void LinkArtistStatistics(List<ArtistResource> resources, List<AuthorStatistics> artistStatistics)
+        private void LinkArtistStatistics(List<AuthorResource> resources, List<AuthorStatistics> authorStatistics)
         {
-            foreach (var artist in resources)
+            foreach (var author in resources)
             {
-                var stats = artistStatistics.SingleOrDefault(ss => ss.AuthorId == artist.Id);
+                var stats = authorStatistics.SingleOrDefault(ss => ss.AuthorId == author.Id);
                 if (stats == null)
                 {
                     continue;
                 }
 
-                LinkArtistStatistics(artist, stats);
+                LinkArtistStatistics(author, stats);
             }
         }
 
-        private void LinkArtistStatistics(ArtistResource resource, AuthorStatistics artistStatistics)
+        private void LinkArtistStatistics(AuthorResource resource, AuthorStatistics authorStatistics)
         {
-            resource.Statistics = artistStatistics.ToResource();
+            resource.Statistics = authorStatistics.ToResource();
         }
 
         //private void PopulateAlternateTitles(List<ArtistResource> resources)
@@ -234,7 +234,7 @@ namespace Readarr.Api.V1.Artist
 
         //    resource.AlternateTitles = mappings.Select(v => new AlternateTitleResource { Title = v.Title, SeasonNumber = v.SeasonNumber, SceneSeasonNumber = v.SceneSeasonNumber }).ToList();
         //}
-        private void LinkRootFolderPath(ArtistResource resource)
+        private void LinkRootFolderPath(AuthorResource resource)
         {
             resource.RootFolderPath = _rootFolderService.GetBestRootFolderPath(resource.Path);
         }
@@ -246,7 +246,7 @@ namespace Readarr.Api.V1.Artist
 
         public void Handle(BookEditedEvent message)
         {
-            BroadcastResourceChange(ModelAction.Updated, GetArtistResource(message.Album.Author.Value));
+            BroadcastResourceChange(ModelAction.Updated, GetArtistResource(message.Book.Author.Value));
         }
 
         public void Handle(BookFileDeletedEvent message)

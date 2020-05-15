@@ -1,20 +1,20 @@
 using System.Collections.Generic;
-using Readarr.Api.V1.Albums;
+using Readarr.Api.V1.Books;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client
 {
-    public class AlbumClient : ClientBase<AlbumResource>
+    public class AlbumClient : ClientBase<BookResource>
     {
         public AlbumClient(IRestClient restClient, string apiKey)
             : base(restClient, apiKey, "album")
         {
         }
 
-        public List<AlbumResource> GetAlbumsInArtist(int authorId)
+        public List<BookResource> GetAlbumsInArtist(int authorId)
         {
             var request = BuildRequest("?authorId=" + authorId.ToString());
-            return Get<List<AlbumResource>>(request);
+            return Get<List<BookResource>>(request);
         }
     }
 }

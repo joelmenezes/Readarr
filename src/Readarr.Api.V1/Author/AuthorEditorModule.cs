@@ -7,52 +7,52 @@ using NzbDrone.Core.Books.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using Readarr.Http.Extensions;
 
-namespace Readarr.Api.V1.Artist
+namespace Readarr.Api.V1.Author
 {
-    public class ArtistEditorModule : ReadarrV1Module
+    public class AuthorEditorModule : ReadarrV1Module
     {
         private readonly IAuthorService _authorService;
         private readonly IManageCommandQueue _commandQueueManager;
 
-        public ArtistEditorModule(IAuthorService authorService, IManageCommandQueue commandQueueManager)
-            : base("/artist/editor")
+        public AuthorEditorModule(IAuthorService authorService, IManageCommandQueue commandQueueManager)
+            : base("/author/editor")
         {
             _authorService = authorService;
             _commandQueueManager = commandQueueManager;
-            Put("/", artist => SaveAll());
-            Delete("/", artist => DeleteArtist());
+            Put("/", author => SaveAll());
+            Delete("/", author => DeleteAuthor());
         }
 
         private object SaveAll()
         {
-            var resource = Request.Body.FromJson<ArtistEditorResource>();
-            var artistToUpdate = _authorService.GetAuthors(resource.AuthorIds);
-            var artistToMove = new List<BulkMoveAuthor>();
+            var resource = Request.Body.FromJson<AuthorEditorResource>();
+            var authorsToUpdate = _authorService.GetAuthors(resource.AuthorIds);
+            var authorsToMove = new List<BulkMoveAuthor>();
 
-            foreach (var artist in artistToUpdate)
+            foreach (var author in authorsToUpdate)
             {
                 if (resource.Monitored.HasValue)
                 {
-                    artist.Monitored = resource.Monitored.Value;
+                    author.Monitored = resource.Monitored.Value;
                 }
 
                 if (resource.QualityProfileId.HasValue)
                 {
-                    artist.QualityProfileId = resource.QualityProfileId.Value;
+                    author.QualityProfileId = resource.QualityProfileId.Value;
                 }
 
                 if (resource.MetadataProfileId.HasValue)
                 {
-                    artist.MetadataProfileId = resource.MetadataProfileId.Value;
+                    author.MetadataProfileId = resource.MetadataProfileId.Value;
                 }
 
                 if (resource.RootFolderPath.IsNotNullOrWhiteSpace())
                 {
-                    artist.RootFolderPath = resource.RootFolderPath;
-                    artistToMove.Add(new BulkMoveAuthor
+                    author.RootFolderPath = resource.RootFolderPath;
+                    authorsToMove.Add(new BulkMoveAuthor
                     {
-                        AuthorId = artist.Id,
-                        SourcePath = artist.Path
+                        AuthorId = author.Id,
+                        SourcePath = author.Path
                     });
                 }
 
@@ -64,35 +64,35 @@ namespace Readarr.Api.V1.Artist
                     switch (applyTags)
                     {
                         case ApplyTags.Add:
-                            newTags.ForEach(t => artist.Tags.Add(t));
+                            newTags.ForEach(t => author.Tags.Add(t));
                             break;
                         case ApplyTags.Remove:
-                            newTags.ForEach(t => artist.Tags.Remove(t));
+                            newTags.ForEach(t => author.Tags.Remove(t));
                             break;
                         case ApplyTags.Replace:
-                            artist.Tags = new HashSet<int>(newTags);
+                            author.Tags = new HashSet<int>(newTags);
                             break;
                     }
                 }
             }
 
-            if (resource.MoveFiles && artistToMove.Any())
+            if (resource.MoveFiles && authorsToMove.Any())
             {
                 _commandQueueManager.Push(new BulkMoveAuthorCommand
                 {
                     DestinationRootFolder = resource.RootFolderPath,
-                    Author = artistToMove
+                    Author = authorsToMove
                 });
             }
 
-            return ResponseWithCode(_authorService.UpdateAuthors(artistToUpdate, !resource.MoveFiles)
+            return ResponseWithCode(_authorService.UpdateAuthors(authorsToUpdate, !resource.MoveFiles)
                                  .ToResource(),
                                  HttpStatusCode.Accepted);
         }
 
-        private object DeleteArtist()
+        private object DeleteAuthor()
         {
-            var resource = Request.Body.FromJson<ArtistEditorResource>();
+            var resource = Request.Body.FromJson<AuthorEditorResource>();
 
             foreach (var authorId in resource.AuthorIds)
             {

@@ -19,9 +19,9 @@ using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
 using Readarr.Http.Extensions;
 
-namespace Readarr.Api.V1.Albums
+namespace Readarr.Api.V1.Books
 {
-    public class AlbumModule : AlbumModuleWithSignalR,
+    public class BookModule : BookModuleWithSignalR,
         IHandle<BookGrabbedEvent>,
         IHandle<BookEditedEvent>,
         IHandle<BookUpdatedEvent>,
@@ -32,53 +32,53 @@ namespace Readarr.Api.V1.Albums
         protected readonly IAuthorService _authorService;
         protected readonly IAddBookService _addBookService;
 
-        public AlbumModule(IAuthorService authorService,
+        public BookModule(IAuthorService authorService,
                            IBookService bookService,
                            IAddBookService addBookService,
-                           IAuthorStatisticsService artistStatisticsService,
+                           IAuthorStatisticsService authorStatisticsService,
                            IMapCoversToLocal coverMapper,
                            IUpgradableSpecification upgradableSpecification,
                            IBroadcastSignalRMessage signalRBroadcaster,
                            QualityProfileExistsValidator qualityProfileExistsValidator,
                            MetadataProfileExistsValidator metadataProfileExistsValidator)
 
-        : base(bookService, artistStatisticsService, coverMapper, upgradableSpecification, signalRBroadcaster)
+        : base(bookService, authorStatisticsService, coverMapper, upgradableSpecification, signalRBroadcaster)
         {
             _authorService = authorService;
             _addBookService = addBookService;
 
-            GetResourceAll = GetAlbums;
-            CreateResource = AddAlbum;
-            UpdateResource = UpdateAlbum;
-            DeleteResource = DeleteAlbum;
-            Put("/monitor", x => SetAlbumsMonitored());
+            GetResourceAll = GetBooks;
+            CreateResource = AddBook;
+            UpdateResource = UpdateBook;
+            DeleteResource = DeleteBook;
+            Put("/monitor", x => SetBooksMonitored());
 
             PostValidator.RuleFor(s => s.ForeignBookId).NotEmpty();
-            PostValidator.RuleFor(s => s.Artist.QualityProfileId).SetValidator(qualityProfileExistsValidator);
-            PostValidator.RuleFor(s => s.Artist.MetadataProfileId).SetValidator(metadataProfileExistsValidator);
-            PostValidator.RuleFor(s => s.Artist.RootFolderPath).IsValidPath().When(s => s.Artist.Path.IsNullOrWhiteSpace());
-            PostValidator.RuleFor(s => s.Artist.ForeignAuthorId).NotEmpty();
+            PostValidator.RuleFor(s => s.Author.QualityProfileId).SetValidator(qualityProfileExistsValidator);
+            PostValidator.RuleFor(s => s.Author.MetadataProfileId).SetValidator(metadataProfileExistsValidator);
+            PostValidator.RuleFor(s => s.Author.RootFolderPath).IsValidPath().When(s => s.Author.Path.IsNullOrWhiteSpace());
+            PostValidator.RuleFor(s => s.Author.ForeignAuthorId).NotEmpty();
         }
 
-        private List<AlbumResource> GetAlbums()
+        private List<BookResource> GetBooks()
         {
             var authorIdQuery = Request.Query.AuthorId;
             var bookIdsQuery = Request.Query.BookIds;
             var slugQuery = Request.Query.TitleSlug;
-            var includeAllArtistAlbumsQuery = Request.Query.IncludeAllArtistAlbums;
+            var includeAllAuthorBooksQuery = Request.Query.IncludeAllAuthorBooks;
 
             if (!Request.Query.AuthorId.HasValue && !bookIdsQuery.HasValue && !slugQuery.HasValue)
             {
-                var albums = _bookService.GetAllBooks();
+                var books = _bookService.GetAllBooks();
 
-                var artists = _authorService.GetAllAuthors().ToDictionary(x => x.AuthorMetadataId);
+                var authors = _authorService.GetAllAuthors().ToDictionary(x => x.AuthorMetadataId);
 
-                foreach (var album in albums)
+                foreach (var book in books)
                 {
-                    album.Author = artists[album.AuthorMetadataId];
+                    book.Author = authors[book.AuthorMetadataId];
                 }
 
-                return MapToResource(albums, false);
+                return MapToResource(books, false);
             }
 
             if (authorIdQuery.HasValue)
@@ -92,20 +92,20 @@ namespace Readarr.Api.V1.Albums
             {
                 string titleSlug = slugQuery.Value.ToString();
 
-                var album = _bookService.FindBySlug(titleSlug);
+                var book = _bookService.FindBySlug(titleSlug);
 
-                if (album == null)
+                if (book == null)
                 {
                     return MapToResource(new List<Book>(), false);
                 }
 
-                if (includeAllArtistAlbumsQuery.HasValue && Convert.ToBoolean(includeAllArtistAlbumsQuery.Value))
+                if (includeAllAuthorBooksQuery.HasValue && Convert.ToBoolean(includeAllAuthorBooksQuery.Value))
                 {
-                    return MapToResource(_bookService.GetBooksByAuthor(album.AuthorId), false);
+                    return MapToResource(_bookService.GetBooksByAuthor(book.AuthorId), false);
                 }
                 else
                 {
-                    return MapToResource(new List<Book> { album }, false);
+                    return MapToResource(new List<Book> { book }, false);
                 }
             }
 
@@ -118,25 +118,25 @@ namespace Readarr.Api.V1.Albums
             return MapToResource(_bookService.GetBooks(bookIds), false);
         }
 
-        private int AddAlbum(AlbumResource albumResource)
+        private int AddBook(BookResource bookResource)
         {
-            var album = _addBookService.AddBook(albumResource.ToModel());
+            var book = _addBookService.AddBook(bookResource.ToModel());
 
-            return album.Id;
+            return book.Id;
         }
 
-        private void UpdateAlbum(AlbumResource albumResource)
+        private void UpdateBook(BookResource bookResource)
         {
-            var album = _bookService.GetBook(albumResource.Id);
+            var book = _bookService.GetBook(bookResource.Id);
 
-            var model = albumResource.ToModel(album);
+            var model = bookResource.ToModel(book);
 
             _bookService.UpdateBook(model);
 
             BroadcastResourceChange(ModelAction.Updated, model.Id);
         }
 
-        private void DeleteAlbum(int id)
+        private void DeleteBook(int id)
         {
             var deleteFiles = Request.GetBooleanQueryParameter("deleteFiles");
             var addImportListExclusion = Request.GetBooleanQueryParameter("addImportListExclusion");
@@ -144,9 +144,9 @@ namespace Readarr.Api.V1.Albums
             _bookService.DeleteBook(id, deleteFiles, addImportListExclusion);
         }
 
-        private object SetAlbumsMonitored()
+        private object SetBooksMonitored()
         {
-            var resource = Request.Body.FromJson<AlbumsMonitoredResource>();
+            var resource = Request.Body.FromJson<BooksMonitoredResource>();
 
             _bookService.SetMonitored(resource.BookIds, resource.Monitored);
 
@@ -155,9 +155,9 @@ namespace Readarr.Api.V1.Albums
 
         public void Handle(BookGrabbedEvent message)
         {
-            foreach (var album in message.Book.Books)
+            foreach (var book in message.Book.Books)
             {
-                var resource = album.ToResource();
+                var resource = book.ToResource();
                 resource.Grabbed = true;
 
                 BroadcastResourceChange(ModelAction.Updated, resource);
@@ -166,7 +166,7 @@ namespace Readarr.Api.V1.Albums
 
         public void Handle(BookEditedEvent message)
         {
-            BroadcastResourceChange(ModelAction.Updated, MapToResource(message.Album, true));
+            BroadcastResourceChange(ModelAction.Updated, MapToResource(message.Book, true));
         }
 
         public void Handle(BookUpdatedEvent message)

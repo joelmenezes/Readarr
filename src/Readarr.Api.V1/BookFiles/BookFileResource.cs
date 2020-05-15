@@ -7,9 +7,9 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using Readarr.Http.REST;
 
-namespace Readarr.Api.V1.TrackFiles
+namespace Readarr.Api.V1.BookFiles
 {
-    public class TrackFileResource : RestResource
+    public class BookFileResource : RestResource
     {
         public int AuthorId { get; set; }
         public int BookId { get; set; }
@@ -24,7 +24,7 @@ namespace Readarr.Api.V1.TrackFiles
         public ParsedTrackInfo AudioTags { get; set; }
     }
 
-    public static class TrackFileResourceMapper
+    public static class BookFileResourceMapper
     {
         private static int QualityWeight(QualityModel quality)
         {
@@ -39,14 +39,14 @@ namespace Readarr.Api.V1.TrackFiles
             return qualityWeight;
         }
 
-        public static TrackFileResource ToResource(this BookFile model)
+        public static BookFileResource ToResource(this BookFile model)
         {
             if (model == null)
             {
                 return null;
             }
 
-            return new TrackFileResource
+            return new BookFileResource
             {
                 Id = model.Id,
                 BookId = model.BookId,
@@ -59,18 +59,18 @@ namespace Readarr.Api.V1.TrackFiles
             };
         }
 
-        public static TrackFileResource ToResource(this BookFile model, NzbDrone.Core.Books.Author artist, IUpgradableSpecification upgradableSpecification)
+        public static BookFileResource ToResource(this BookFile model, NzbDrone.Core.Books.Author author, IUpgradableSpecification upgradableSpecification)
         {
             if (model == null)
             {
                 return null;
             }
 
-            return new TrackFileResource
+            return new BookFileResource
             {
                 Id = model.Id,
 
-                AuthorId = artist.Id,
+                AuthorId = author.Id,
                 BookId = model.BookId,
                 Path = model.Path,
                 Size = model.Size,
@@ -78,7 +78,7 @@ namespace Readarr.Api.V1.TrackFiles
                 Quality = model.Quality,
                 QualityWeight = QualityWeight(model.Quality),
                 MediaInfo = model.MediaInfo.ToResource(),
-                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(artist.QualityProfile.Value, model.Quality)
+                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(author.QualityProfile.Value, model.Quality)
             };
         }
     }

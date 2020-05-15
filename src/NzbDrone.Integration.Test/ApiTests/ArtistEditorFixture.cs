@@ -2,7 +2,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
-using Readarr.Api.V1.Artist;
+using Readarr.Api.V1.Author;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
@@ -30,7 +30,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var artist = Artist.All();
 
-            var artistEditor = new ArtistEditorResource
+            var artistEditor = new AuthorEditorResource
             {
                 QualityProfileId = 2,
                 AuthorIds = artist.Select(o => o.Id).ToList()
