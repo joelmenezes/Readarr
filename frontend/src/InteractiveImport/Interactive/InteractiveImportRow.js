@@ -9,9 +9,9 @@ import TableRowCellButton from 'Components/Table/Cells/TableRowCellButton';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
-import TrackQuality from 'Album/TrackQuality';
-import SelectArtistModal from 'InteractiveImport/Artist/SelectArtistModal';
-import SelectAlbumModal from 'InteractiveImport/Album/SelectAlbumModal';
+import TrackQuality from 'Book/TrackQuality';
+import SelectArtistModal from 'InteractiveImport/Author/SelectArtistModal';
+import SelectAlbumModal from 'InteractiveImport/Book/SelectAlbumModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import InteractiveImportRowCellPlaceholder from './InteractiveImportRowCellPlaceholder';
 import styles from './InteractiveImportRow.css';
@@ -34,13 +34,13 @@ class InteractiveImportRow extends Component {
   componentDidMount() {
     const {
       id,
-      artist,
+      author,
       album,
       quality
     } = this.props;
 
     if (
-      artist &&
+      author &&
       album != null &&
       quality
     ) {
@@ -51,7 +51,7 @@ class InteractiveImportRow extends Component {
   componentDidUpdate(prevProps) {
     const {
       id,
-      artist,
+      author,
       album,
       quality,
       isSelected,
@@ -59,7 +59,7 @@ class InteractiveImportRow extends Component {
     } = this.props;
 
     if (
-      prevProps.artist === artist &&
+      prevProps.author === author &&
       prevProps.album === album &&
       prevProps.quality === quality &&
       prevProps.isSelected === isSelected
@@ -68,7 +68,7 @@ class InteractiveImportRow extends Component {
     }
 
     const isValid = !!(
-      artist &&
+      author &&
       album &&
       quality
     );
@@ -132,7 +132,7 @@ class InteractiveImportRow extends Component {
       id,
       allowArtistChange,
       path,
-      artist,
+      author,
       album,
       quality,
       size,
@@ -148,14 +148,14 @@ class InteractiveImportRow extends Component {
       isSelectQualityModalOpen
     } = this.state;
 
-    const artistName = artist ? artist.artistName : '';
+    const authorName = author ? author.authorName : '';
     let albumTitle = '';
     if (album) {
       albumTitle = album.disambiguation ? `${album.title} (${album.disambiguation})` : album.title;
     }
 
-    const showArtistPlaceholder = isSelected && !artist;
-    const showAlbumNumberPlaceholder = isSelected && !!artist && !album;
+    const showArtistPlaceholder = isSelected && !author;
+    const showAlbumNumberPlaceholder = isSelected && !!author && !album;
     const showQualityPlaceholder = isSelected && !quality;
 
     const pathCellContents = (
@@ -191,17 +191,17 @@ class InteractiveImportRow extends Component {
 
         <TableRowCellButton
           isDisabled={!allowArtistChange}
-          title={allowArtistChange ? 'Click to change artist' : undefined}
+          title={allowArtistChange ? 'Click to change author' : undefined}
           onPress={this.onSelectArtistPress}
         >
           {
-            showArtistPlaceholder ? <InteractiveImportRowCellPlaceholder /> : artistName
+            showArtistPlaceholder ? <InteractiveImportRowCellPlaceholder /> : authorName
           }
         </TableRowCellButton>
 
         <TableRowCellButton
-          isDisabled={!artist}
-          title={artist ? 'Click to change album' : undefined}
+          isDisabled={!author}
+          title={author ? 'Click to change album' : undefined}
           onPress={this.onSelectAlbumPress}
         >
           {
@@ -271,7 +271,7 @@ class InteractiveImportRow extends Component {
         <SelectAlbumModal
           isOpen={isSelectAlbumModalOpen}
           ids={[id]}
-          authorId={artist && artist.id}
+          authorId={author && author.id}
           onModalClose={this.onSelectAlbumModalClose}
         />
 
@@ -293,7 +293,7 @@ InteractiveImportRow.propTypes = {
   id: PropTypes.number.isRequired,
   allowArtistChange: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
-  artist: PropTypes.object,
+  author: PropTypes.object,
   album: PropTypes.object,
   quality: PropTypes.object,
   size: PropTypes.number.isRequired,

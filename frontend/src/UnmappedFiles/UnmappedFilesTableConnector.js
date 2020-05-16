@@ -7,7 +7,7 @@ import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePo
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
-import { fetchTrackFiles, deleteTrackFile, setTrackFilesSort, setTrackFilesTableOption } from 'Store/Actions/trackFileActions';
+import { fetchBookFiles, deleteBookFile, setBookFilesSort, setBookFilesTableOption } from 'Store/Actions/bookFileActions';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as commandNames from 'Commands/commandNames';
 import withCurrentPage from 'Components/withCurrentPage';
@@ -15,11 +15,11 @@ import UnmappedFilesTable from './UnmappedFilesTable';
 
 function createMapStateToProps() {
   return createSelector(
-    createClientSideCollectionSelector('trackFiles'),
+    createClientSideCollectionSelector('bookFiles'),
     createCommandExecutingSelector(commandNames.RESCAN_FOLDERS),
     createDimensionsSelector(),
     (
-      trackFiles,
+      bookFiles,
       isScanningFolders,
       dimensionsState
     ) => {
@@ -27,7 +27,7 @@ function createMapStateToProps() {
       const {
         items,
         ...otherProps
-      } = trackFiles;
+      } = bookFiles;
       const unmappedFiles = _.filter(items, { bookId: 0 });
       return {
         items: unmappedFiles,
@@ -42,19 +42,19 @@ function createMapStateToProps() {
 function createMapDispatchToProps(dispatch, props) {
   return {
     onTableOptionChange(payload) {
-      dispatch(setTrackFilesTableOption(payload));
+      dispatch(setBookFilesTableOption(payload));
     },
 
     onSortPress(sortKey) {
-      dispatch(setTrackFilesSort({ sortKey }));
+      dispatch(setBookFilesSort({ sortKey }));
     },
 
     fetchUnmappedFiles() {
-      dispatch(fetchTrackFiles({ unmapped: true }));
+      dispatch(fetchBookFiles({ unmapped: true }));
     },
 
     deleteUnmappedFile(id) {
-      dispatch(deleteTrackFile({ id }));
+      dispatch(deleteBookFile({ id }));
     },
 
     onAddMissingArtistsPress() {
@@ -73,7 +73,7 @@ class UnmappedFilesTableConnector extends Component {
   // Lifecycle
 
   componentDidMount() {
-    registerPagePopulator(this.repopulate, ['trackFileUpdated']);
+    registerPagePopulator(this.repopulate, ['bookFileUpdated']);
 
     this.repopulate();
   }

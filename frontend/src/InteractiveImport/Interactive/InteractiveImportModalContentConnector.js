@@ -122,19 +122,19 @@ class InteractiveImportModalContentConnector extends Component {
 
       if (isSelected) {
         const {
-          artist,
+          author,
           album,
           quality,
           disableReleaseSwitching
         } = item;
 
-        if (!artist) {
-          this.setState({ interactiveImportErrorMessage: 'Artist must be chosen for each selected file' });
+        if (!author) {
+          this.setState({ interactiveImportErrorMessage: 'Author must be chosen for each selected file' });
           return false;
         }
 
         if (!album) {
-          this.setState({ interactiveImportErrorMessage: 'Album must be chosen for each selected file' });
+          this.setState({ interactiveImportErrorMessage: 'Book must be chosen for each selected file' });
           return false;
         }
 
@@ -145,7 +145,7 @@ class InteractiveImportModalContentConnector extends Component {
 
         files.push({
           path: item.path,
-          authorId: artist.id,
+          authorId: author.id,
           bookId: album.id,
           quality,
           downloadId: this.props.downloadId,

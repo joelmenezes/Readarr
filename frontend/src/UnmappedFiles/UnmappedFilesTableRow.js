@@ -6,7 +6,7 @@ import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
-import TrackQuality from 'Album/TrackQuality';
+import TrackQuality from 'Book/TrackQuality';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import FileDetailsModal from 'TrackFile/FileDetailsModal';
 import styles from './UnmappedFilesTableRow.css';

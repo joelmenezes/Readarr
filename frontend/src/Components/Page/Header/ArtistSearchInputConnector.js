@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { createSelector } from 'reselect';
-import createAllArtistSelector from 'Store/Selectors/createAllArtistSelector';
+import createAllArtistSelector from 'Store/Selectors/createAllAuthorsSelector';
 import createDeepEqualSelector from 'Store/Selectors/createDeepEqualSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import ArtistSearchInput from './ArtistSearchInput';
@@ -11,17 +11,17 @@ function createCleanArtistSelector() {
     createAllArtistSelector(),
     createTagsSelector(),
     (allArtists, allTags) => {
-      return allArtists.map((artist) => {
+      return allArtists.map((author) => {
         const {
-          artistName,
+          authorName,
           sortName,
           images,
           titleSlug,
           tags = []
-        } = artist;
+        } = author;
 
         return {
-          artistName,
+          authorName,
           sortName,
           titleSlug,
           images,

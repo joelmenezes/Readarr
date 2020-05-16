@@ -9,7 +9,7 @@ import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import FilterMenu from 'Components/Menu/FilterMenu';
-import NoArtist from 'Artist/NoArtist';
+import NoArtist from 'Author/NoAuthor';
 import CalendarLinkModal from './iCal/CalendarLinkModal';
 import CalendarOptionsModal from './Options/CalendarOptionsModal';
 import LegendConnector from './Legend/LegendConnector';
@@ -136,7 +136,7 @@ class CalendarPage extends Component {
           {
             artistError &&
             <div className={styles.errorMessage}>
-              {getErrorMessage(artistError, 'Failed to load artist from API')}
+              {getErrorMessage(artistError, 'Failed to load author from API')}
             </div>
           }
 

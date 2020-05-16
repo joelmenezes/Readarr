@@ -8,7 +8,7 @@ import titleCase from 'Utilities/String/titleCase';
 import { fetchCommands, updateCommand, finishCommand } from 'Store/Actions/commandActions';
 import { setAppValue, setVersion } from 'Store/Actions/appActions';
 import { update, updateItem, removeItem } from 'Store/Actions/baseActions';
-import { fetchArtist } from 'Store/Actions/artistActions';
+import { fetchAuthor } from 'Store/Actions/authorActions';
 import { fetchHealth } from 'Store/Actions/systemActions';
 import { fetchQueue, fetchQueueDetails } from 'Store/Actions/queueActions';
 import { fetchRootFolders } from 'Store/Actions/settingsActions';
@@ -45,7 +45,7 @@ const mapDispatchToProps = {
   dispatchUpdate: update,
   dispatchUpdateItem: updateItem,
   dispatchRemoveItem: removeItem,
-  dispatchFetchArtist: fetchArtist,
+  dispatchFetchArtist: fetchAuthor,
   dispatchFetchHealth: fetchHealth,
   dispatchFetchQueue: fetchQueue,
   dispatchFetchQueueDetails: fetchQueueDetails,
@@ -220,9 +220,9 @@ class SignalRConnector extends Component {
     this.props.dispatchFetchHealth();
   }
 
-  handleArtist = (body) => {
+  handleAuthor = (body) => {
     const action = body.action;
-    const section = 'artist';
+    const section = 'authors';
 
     if (action === 'updated') {
       this.props.dispatchUpdateItem({ section, ...body.resource });

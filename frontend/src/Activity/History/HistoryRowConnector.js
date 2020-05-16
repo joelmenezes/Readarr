@@ -3,21 +3,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { fetchHistory, markAsFailed } from 'Store/Actions/historyActions';
-import createArtistSelector from 'Store/Selectors/createArtistSelector';
-import createAlbumSelector from 'Store/Selectors/createAlbumSelector';
+import createAuthorSelector from 'Store/Selectors/createAuthorSelector';
+import createAlbumSelector from 'Store/Selectors/createBookSelector';
 import createTrackSelector from 'Store/Selectors/createTrackSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import HistoryRow from './HistoryRow';
 
 function createMapStateToProps() {
   return createSelector(
-    createArtistSelector(),
+    createAuthorSelector(),
     createAlbumSelector(),
     createTrackSelector(),
     createUISettingsSelector(),
-    (artist, album, track, uiSettings) => {
+    (author, album, track, uiSettings) => {
       return {
-        artist,
+        author,
         album,
         track,
         shortDateFormat: uiSettings.shortDateFormat,

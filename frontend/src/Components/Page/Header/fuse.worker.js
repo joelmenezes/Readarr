@@ -9,7 +9,7 @@ const fuseOptions = {
   maxPatternLength: 32,
   minMatchCharLength: 1,
   keys: [
-    'artistName',
+    'authorName',
     'tags.label'
   ]
 };

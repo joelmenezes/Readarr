@@ -1,14 +1,14 @@
 import { get } from 'lodash';
-import monitorOptions from 'Utilities/Artist/monitorOptions';
+import monitorOptions from 'Utilities/Author/monitorOptions';
 
 export default function migrateAddArtistDefaults(persistedState) {
-  const monitor = get(persistedState, 'addArtist.defaults.monitor');
+  const monitor = get(persistedState, 'addAuthor.defaults.monitor');
 
   if (!monitor) {
     return;
   }
 
   if (!monitorOptions.find((option) => option.key === monitor)) {
-    persistedState.addArtist.defaults.monitor = monitorOptions[0].key;
+    persistedState.addAuthor.defaults.monitor = monitorOptions[0].key;
   }
 }

@@ -7,8 +7,8 @@ import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
-import ArtistMonitoringOptionsPopoverContent from 'AddArtist/ArtistMonitoringOptionsPopoverContent';
-import ArtistMetadataProfilePopoverContent from 'AddArtist/ArtistMetadataProfilePopoverContent';
+import ArtistMonitoringOptionsPopoverContent from 'AddAuthor/AuthorMonitoringOptionsPopoverContent';
+import ArtistMetadataProfilePopoverContent from 'AddAuthor/AuthorMetadataProfilePopoverContent';
 import styles from './AddArtistOptionsForm.css';
 
 class AddArtistOptionsForm extends Component {

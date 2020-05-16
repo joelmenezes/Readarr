@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { kinds } from 'Helpers/Props';
 import Label from 'Components/Label';
-import ArtistPoster from 'Artist/ArtistPoster';
+import ArtistPoster from 'Author/AuthorPoster';
 import styles from './ArtistSearchResult.css';
 
 function ArtistSearchResult(props) {
   const {
     match,
-    artistName,
+    authorName,
     images,
     tags
   } = props;
@@ -31,7 +31,7 @@ function ArtistSearchResult(props) {
 
       <div className={styles.titles}>
         <div className={styles.title}>
-          {artistName}
+          {authorName}
         </div>
 
         {
@@ -52,7 +52,7 @@ function ArtistSearchResult(props) {
 }
 
 ArtistSearchResult.propTypes = {
-  artistName: PropTypes.string.isRequired,
+  authorName: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   tags: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired

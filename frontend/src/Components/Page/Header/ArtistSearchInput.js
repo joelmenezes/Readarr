@@ -132,8 +132,8 @@ class ArtistSearchInput extends Component {
       return;
     }
 
-    // If an suggestion is not selected go to the first artist,
-    // otherwise go to the selected artist.
+    // If an suggestion is not selected go to the first author,
+    // otherwise go to the selected author.
 
     if (highlightedSuggestionIndex == null) {
       this.goToArtist(suggestions[0]);
@@ -203,7 +203,7 @@ class ArtistSearchInput extends Component {
 
     if (suggestions.length) {
       suggestionGroups.push({
-        title: 'Existing Artist',
+        title: 'Existing Author',
         suggestions
       });
     }

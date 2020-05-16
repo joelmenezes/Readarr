@@ -9,21 +9,21 @@ import withCurrentPage from 'Components/withCurrentPage';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as queueActions from 'Store/Actions/queueActions';
-import { fetchAlbums, clearAlbums } from 'Store/Actions/albumActions';
+import { fetchBooks, clearBooks } from 'Store/Actions/bookActions';
 import * as commandNames from 'Commands/commandNames';
 import Queue from './Queue';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.albums,
+    (state) => state.books,
     (state) => state.queue.options,
     (state) => state.queue.paged,
     createCommandExecutingSelector(commandNames.REFRESH_MONITORED_DOWNLOADS),
-    (albums, options, queue, isRefreshMonitoredDownloadsExecuting) => {
+    (books, options, queue, isRefreshMonitoredDownloadsExecuting) => {
       return {
-        isAlbumsFetching: albums.isFetching,
-        isAlbumsPopulated: albums.isPopulated,
-        albumsError: albums.error,
+        isAlbumsFetching: books.isFetching,
+        isAlbumsPopulated: books.isPopulated,
+        albumsError: books.error,
         isRefreshMonitoredDownloadsExecuting,
         ...options,
         ...queue
@@ -34,8 +34,8 @@ function createMapStateToProps() {
 
 const mapDispatchToProps = {
   ...queueActions,
-  fetchAlbums,
-  clearAlbums,
+  fetchBooks,
+  clearBooks,
   executeCommand
 };
 
@@ -65,9 +65,9 @@ class QueueConnector extends Component {
       const bookIds = selectUniqueIds(this.props.items, 'bookId');
 
       if (bookIds.length) {
-        this.props.fetchAlbums({ bookIds });
+        this.props.fetchBooks({ bookIds });
       } else {
-        this.props.clearAlbums();
+        this.props.clearBooks();
       }
     }
 
@@ -82,7 +82,7 @@ class QueueConnector extends Component {
   componentWillUnmount() {
     unregisterPagePopulator(this.repopulate);
     this.props.clearQueue();
-    this.props.clearAlbums();
+    this.props.clearBooks();
   }
 
   //
@@ -178,8 +178,8 @@ QueueConnector.propTypes = {
   clearQueue: PropTypes.func.isRequired,
   grabQueueItems: PropTypes.func.isRequired,
   removeQueueItems: PropTypes.func.isRequired,
-  fetchAlbums: PropTypes.func.isRequired,
-  clearAlbums: PropTypes.func.isRequired,
+  fetchBooks: PropTypes.func.isRequired,
+  clearBooks: PropTypes.func.isRequired,
   executeCommand: PropTypes.func.isRequired
 };
 

@@ -21,7 +21,7 @@ function ErrorPage(props) {
   if (!isLocalStorageSupported) {
     errorMessage = 'Local Storage is not supported or disabled. A plugin or private browsing may have disabled it.';
   } else if (artistError) {
-    errorMessage = getErrorMessage(artistError, 'Failed to load artist from API');
+    errorMessage = getErrorMessage(artistError, 'Failed to load author from API');
   } else if (customFiltersError) {
     errorMessage = getErrorMessage(customFiltersError, 'Failed to load custom filters from API');
   } else if (tagsError) {

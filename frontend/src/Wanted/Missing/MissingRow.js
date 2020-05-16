@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import albumEntities from 'Album/albumEntities';
-import AlbumTitleLink from 'Album/AlbumTitleLink';
-import AlbumSearchCellConnector from 'Album/AlbumSearchCellConnector';
-import ArtistNameLink from 'Artist/ArtistNameLink';
+import bookEntities from 'Book/bookEntities';
+import AlbumTitleLink from 'Book/AlbumTitleLink';
+import AlbumSearchCellConnector from 'Book/AlbumSearchCellConnector';
+import AuthorNameLink from 'Author/AuthorNameLink';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -12,7 +12,7 @@ import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 function MissingRow(props) {
   const {
     id,
-    artist,
+    author,
     releaseDate,
     titleSlug,
     title,
@@ -22,7 +22,7 @@ function MissingRow(props) {
     onSelectedChange
   } = props;
 
-  if (!artist) {
+  if (!author) {
     return null;
   }
 
@@ -48,9 +48,9 @@ function MissingRow(props) {
           if (name === 'authors.sortName') {
             return (
               <TableRowCell key={name}>
-                <ArtistNameLink
-                  titleSlug={artist.titleSlug}
-                  artistName={artist.artistName}
+                <AuthorNameLink
+                  titleSlug={author.titleSlug}
+                  authorName={author.authorName}
                 />
               </TableRowCell>
             );
@@ -82,9 +82,9 @@ function MissingRow(props) {
               <AlbumSearchCellConnector
                 key={name}
                 bookId={id}
-                authorId={artist.id}
+                authorId={author.id}
                 albumTitle={title}
-                albumEntity={albumEntities.WANTED_MISSING}
+                albumEntity={bookEntities.WANTED_MISSING}
                 showOpenArtistButton={true}
               />
             );
@@ -99,7 +99,7 @@ function MissingRow(props) {
 
 MissingRow.propTypes = {
   id: PropTypes.number.isRequired,
-  artist: PropTypes.object.isRequired,
+  author: PropTypes.object.isRequired,
   releaseDate: PropTypes.string.isRequired,
   titleSlug: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,

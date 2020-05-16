@@ -5,8 +5,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import getQualities from 'Utilities/Quality/getQualities';
-import createArtistSelector from 'Store/Selectors/createArtistSelector';
-import { deleteTrackFiles, updateTrackFiles } from 'Store/Actions/trackFileActions';
+import createAuthorSelector from 'Store/Selectors/createAuthorSelector';
+import { deleteBookFiles, updateBookFiles } from 'Store/Actions/bookFileActions';
 import { fetchTracks, clearTracks } from 'Store/Actions/trackActions';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
 import TrackFileEditorTableContent from './TrackFileEditorTableContent';
@@ -38,17 +38,17 @@ function createMapStateToProps() {
     (state, { bookId }) => bookId,
     (state) => state.trackFiles,
     createSchemaSelector(),
-    createArtistSelector(),
+    createAuthorSelector(),
     (
       bookId,
       trackFiles,
       schema,
-      artist
+      author
     ) => {
       return {
         ...schema,
         items: trackFiles.items,
-        artistType: artist.artistType,
+        artistType: author.artistType,
         isDeleting: trackFiles.isDeleting,
         isSaving: trackFiles.isSaving
       };
@@ -71,11 +71,11 @@ function createMapDispatchToProps(dispatch, props) {
     },
 
     dispatchUpdateTrackFiles(updateProps) {
-      dispatch(updateTrackFiles(updateProps));
+      dispatch(updateBookFiles(updateProps));
     },
 
     onDeletePress(trackFileIds) {
-      dispatch(deleteTrackFiles({ trackFileIds }));
+      dispatch(deleteBookFiles({ trackFileIds }));
     }
   };
 }

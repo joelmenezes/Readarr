@@ -10,14 +10,14 @@ import createCommandExecutingSelector from 'Store/Selectors/createCommandExecuti
 import * as wantedActions from 'Store/Actions/wantedActions';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchQueueDetails, clearQueueDetails } from 'Store/Actions/queueActions';
-import { fetchTrackFiles, clearTrackFiles } from 'Store/Actions/trackFileActions';
+import { fetchBookFiles, clearBookFiles } from 'Store/Actions/bookFileActions';
 import * as commandNames from 'Commands/commandNames';
 import CutoffUnmet from './CutoffUnmet';
 
 function createMapStateToProps() {
   return createSelector(
     (state) => state.wanted.cutoffUnmet,
-    createCommandExecutingSelector(commandNames.CUTOFF_UNMET_ALBUM_SEARCH),
+    createCommandExecutingSelector(commandNames.CUTOFF_UNMET_BOOK_SEARCH),
     (cutoffUnmet, isSearchingForCutoffUnmetAlbums) => {
 
       return {
@@ -34,8 +34,8 @@ const mapDispatchToProps = {
   executeCommand,
   fetchQueueDetails,
   clearQueueDetails,
-  fetchTrackFiles,
-  clearTrackFiles
+  fetchBookFiles,
+  clearBookFiles
 };
 
 class CutoffUnmetConnector extends Component {
@@ -67,7 +67,7 @@ class CutoffUnmetConnector extends Component {
       this.props.fetchQueueDetails({ bookIds });
 
       if (trackFileIds.length) {
-        this.props.fetchTrackFiles({ trackFileIds });
+        this.props.fetchBookFiles({ trackFileIds });
       }
     }
   }
@@ -76,7 +76,7 @@ class CutoffUnmetConnector extends Component {
     unregisterPagePopulator(this.repopulate);
     this.props.clearCutoffUnmet();
     this.props.clearQueueDetails();
-    this.props.clearTrackFiles();
+    this.props.clearBookFiles();
   }
 
   //
@@ -127,14 +127,14 @@ class CutoffUnmetConnector extends Component {
 
   onSearchSelectedPress = (selected) => {
     this.props.executeCommand({
-      name: commandNames.ALBUM_SEARCH,
+      name: commandNames.BOOK_SEARCH,
       bookIds: selected
     });
   }
 
   onSearchAllCutoffUnmetPress = () => {
     this.props.executeCommand({
-      name: commandNames.CUTOFF_UNMET_ALBUM_SEARCH
+      name: commandNames.CUTOFF_UNMET_BOOK_SEARCH
     });
   }
 
@@ -177,8 +177,8 @@ CutoffUnmetConnector.propTypes = {
   executeCommand: PropTypes.func.isRequired,
   fetchQueueDetails: PropTypes.func.isRequired,
   clearQueueDetails: PropTypes.func.isRequired,
-  fetchTrackFiles: PropTypes.func.isRequired,
-  clearTrackFiles: PropTypes.func.isRequired
+  fetchBookFiles: PropTypes.func.isRequired,
+  clearBookFiles: PropTypes.func.isRequired
 };
 
 export default withCurrentPage(

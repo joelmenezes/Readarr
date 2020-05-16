@@ -26,7 +26,7 @@ function getHeaderTitle(eventType) {
     case 'trackFileRetagged':
       return 'Track File Tags Updated';
     case 'albumImportIncomplete':
-      return 'Album Import Incomplete';
+      return 'Book Import Incomplete';
     case 'downloadImported':
       return 'Download Completed';
     case 'downloadIgnored':

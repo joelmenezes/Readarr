@@ -21,8 +21,8 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
-import SelectArtistModal from 'InteractiveImport/Artist/SelectArtistModal';
-import SelectAlbumModal from 'InteractiveImport/Album/SelectAlbumModal';
+import SelectArtistModal from 'InteractiveImport/Author/SelectArtistModal';
+import SelectAlbumModal from 'InteractiveImport/Book/SelectAlbumModal';
 import ConfirmImportModal from 'InteractiveImport/Confirmation/ConfirmImportModal';
 import InteractiveImportRow from './InteractiveImportRow';
 import styles from './InteractiveImportModalContent.css';
@@ -35,8 +35,8 @@ const columns = [
     isVisible: true
   },
   {
-    name: 'artist',
-    label: 'Artist',
+    name: 'author',
+    label: 'Author',
     isSortable: true,
     isVisible: true
   },
@@ -77,7 +77,7 @@ const importModeOptions = [
 ];
 
 const SELECT = 'select';
-const ARTIST = 'artist';
+const ARTIST = 'author';
 const ALBUM = 'album';
 const QUALITY = 'quality';
 
@@ -272,14 +272,14 @@ class InteractiveImportModalContent extends Component {
 
     const bulkSelectOptions = [
       { key: SELECT, value: 'Select...', disabled: true },
-      { key: ALBUM, value: 'Select Album' },
+      { key: ALBUM, value: 'Select Book' },
       { key: QUALITY, value: 'Select Quality' }
     ];
 
     if (allowArtistChange) {
       bulkSelectOptions.splice(1, 0, {
         key: ARTIST,
-        value: 'Select Artist'
+        value: 'Select Author'
       });
     }
 
@@ -465,7 +465,7 @@ class InteractiveImportModalContent extends Component {
         <SelectAlbumModal
           isOpen={selectModalOpen === ALBUM}
           ids={selectedIds}
-          authorId={selectedItem && selectedItem.artist && selectedItem.artist.id}
+          authorId={selectedItem && selectedItem.author && selectedItem.author.id}
           onModalClose={this.onSelectModalClose}
         />
 

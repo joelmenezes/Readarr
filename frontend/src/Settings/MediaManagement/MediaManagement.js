@@ -34,7 +34,7 @@ const downloadPropersAndRepacksOptions = [
 
 const fileDateOptions = [
   { key: 'none', value: 'None' },
-  { key: 'albumReleaseDate', value: 'Album Release Date' }
+  { key: 'albumReleaseDate', value: 'Book Release Date' }
 ];
 
 class MediaManagement extends Component {
@@ -96,12 +96,12 @@ class MediaManagement extends Component {
                         isAdvanced={true}
                         size={sizes.MEDIUM}
                       >
-                        <FormLabel>Create empty artist folders</FormLabel>
+                        <FormLabel>Create empty author folders</FormLabel>
 
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="createEmptyArtistFolders"
-                          helpText="Create missing artist folders during disk scan"
+                          helpText="Create missing author folders during disk scan"
                           onChange={onInputChange}
                           {...settings.createEmptyArtistFolders}
                         />
@@ -117,7 +117,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="deleteEmptyFolders"
-                          helpText="Delete empty artist and album folders during disk scan and when track files are deleted"
+                          helpText="Delete empty author and album folders during disk scan and when track files are deleted"
                           onChange={onInputChange}
                           {...settings.deleteEmptyFolders}
                         />
@@ -142,7 +142,7 @@ class MediaManagement extends Component {
                             <FormInputGroup
                               type={inputTypes.CHECK}
                               name="skipFreeSpaceCheckWhenImporting"
-                              helpText="Use when Readarr is unable to detect free space from your artist root folder"
+                              helpText="Use when Readarr is unable to detect free space from your author root folder"
                               onChange={onInputChange}
                               {...settings.skipFreeSpaceCheckWhenImporting}
                             />
@@ -283,7 +283,7 @@ class MediaManagement extends Component {
                     <FormInputGroup
                       type={inputTypes.SELECT}
                       name="rescanAfterRefresh"
-                      helpText="Rescan the artist folder after refreshing the artist"
+                      helpText="Rescan the author folder after refreshing the author"
                       helpTextWarning="Readarr will not automatically detect changes to files when not set to 'Always'"
                       values={rescanAfterRefreshOptions}
                       onChange={onInputChange}
@@ -403,7 +403,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.TEXT}
                           name="folderChmod"
-                          helpText="Octal, applied to artist/album folders created by Readarr"
+                          helpText="Octal, applied to author/album folders created by Readarr"
                           values={fileDateOptions}
                           onChange={onInputChange}
                           {...settings.folderChmod}

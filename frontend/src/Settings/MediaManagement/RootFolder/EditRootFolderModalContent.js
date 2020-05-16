@@ -14,8 +14,8 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import Popover from 'Components/Tooltip/Popover';
-import ArtistMonitoringOptionsPopoverContent from 'AddArtist/ArtistMonitoringOptionsPopoverContent';
-import ArtistMetadataProfilePopoverContent from 'AddArtist/ArtistMetadataProfilePopoverContent';
+import ArtistMonitoringOptionsPopoverContent from 'AddAuthor/AuthorMonitoringOptionsPopoverContent';
+import ArtistMetadataProfilePopoverContent from 'AddAuthor/AuthorMetadataProfilePopoverContent';
 import styles from './EditRootFolderModalContent.css';
 
 function EditRootFolderModalContent(props) {

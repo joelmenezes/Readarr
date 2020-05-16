@@ -1,5 +1,5 @@
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import updateAlbums from 'Utilities/Album/updateAlbums';
+import updateAlbums from 'Utilities/Book/updateBooks';
 import getSectionState from 'Utilities/State/getSectionState';
 
 function createBatchToggleAlbumMonitoredHandler(section, fetchHandler) {

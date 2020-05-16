@@ -12,7 +12,7 @@ import createHandleActions from './Creators/createHandleActions';
 
 export const section = 'releases';
 export const albumSection = 'releases.album';
-export const artistSection = 'releases.artist';
+export const artistSection = 'releases.author';
 
 let abortCurrentRequest = null;
 
@@ -150,7 +150,7 @@ export const defaultState = {
     selectedFilterKey: 'all'
   },
 
-  artist: {
+  author: {
     selectedFilterKey: 'all'
   }
 };
@@ -158,7 +158,7 @@ export const defaultState = {
 export const persistState = [
   'releases.selectedFilterKey',
   'releases.album.customFilters',
-  'releases.artist.customFilters'
+  'releases.author.customFilters'
 ];
 
 //
@@ -249,7 +249,7 @@ export const reducers = createHandleActions({
   [CLEAR_RELEASES]: (state) => {
     const {
       album,
-      artist,
+      author,
       ...otherDefaultState
     } = defaultState;
 

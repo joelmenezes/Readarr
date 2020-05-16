@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import albumEntities from 'Album/albumEntities';
-import AlbumTitleLink from 'Album/AlbumTitleLink';
-import EpisodeStatusConnector from 'Album/EpisodeStatusConnector';
-import AlbumSearchCellConnector from 'Album/AlbumSearchCellConnector';
-import ArtistNameLink from 'Artist/ArtistNameLink';
+import bookEntities from 'Book/bookEntities';
+import AlbumTitleLink from 'Book/AlbumTitleLink';
+import EpisodeStatusConnector from 'Book/EpisodeStatusConnector';
+import AlbumSearchCellConnector from 'Book/AlbumSearchCellConnector';
+import AuthorNameLink from 'Author/AuthorNameLink';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -15,7 +15,7 @@ function CutoffUnmetRow(props) {
   const {
     id,
     trackFileId,
-    artist,
+    author,
     releaseDate,
     titleSlug,
     title,
@@ -25,7 +25,7 @@ function CutoffUnmetRow(props) {
     onSelectedChange
   } = props;
 
-  if (!artist) {
+  if (!author) {
     return null;
   }
 
@@ -51,9 +51,9 @@ function CutoffUnmetRow(props) {
           if (name === 'authors.sortName') {
             return (
               <TableRowCell key={name}>
-                <ArtistNameLink
-                  titleSlug={artist.titleSlug}
-                  artistName={artist.artistName}
+                <AuthorNameLink
+                  titleSlug={author.titleSlug}
+                  authorName={author.authorName}
                 />
               </TableRowCell>
             );
@@ -89,7 +89,7 @@ function CutoffUnmetRow(props) {
                 <EpisodeStatusConnector
                   bookId={id}
                   trackFileId={trackFileId}
-                  albumEntity={albumEntities.WANTED_CUTOFF_UNMET}
+                  albumEntity={bookEntities.WANTED_CUTOFF_UNMET}
                 />
               </TableRowCell>
             );
@@ -100,9 +100,9 @@ function CutoffUnmetRow(props) {
               <AlbumSearchCellConnector
                 key={name}
                 bookId={id}
-                authorId={artist.id}
+                authorId={author.id}
                 albumTitle={title}
-                albumEntity={albumEntities.WANTED_CUTOFF_UNMET}
+                albumEntity={bookEntities.WANTED_CUTOFF_UNMET}
                 showOpenArtistButton={true}
               />
             );
@@ -118,7 +118,7 @@ function CutoffUnmetRow(props) {
 CutoffUnmetRow.propTypes = {
   id: PropTypes.number.isRequired,
   trackFileId: PropTypes.number,
-  artist: PropTypes.object.isRequired,
+  author: PropTypes.object.isRequired,
   releaseDate: PropTypes.string.isRequired,
   titleSlug: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,

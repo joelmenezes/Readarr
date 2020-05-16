@@ -5,7 +5,7 @@ import { isCommandExecuting } from 'Utilities/Command';
 import isBefore from 'Utilities/Date/isBefore';
 import withCurrentPage from 'Components/withCurrentPage';
 import { searchMissing, setCalendarDaysCount, setCalendarFilter } from 'Store/Actions/calendarActions';
-import createArtistCountSelector from 'Store/Selectors/createArtistCountSelector';
+import createArtistCountSelector from 'Store/Selectors/createAuthorCountSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import CalendarPage from './CalendarPage';

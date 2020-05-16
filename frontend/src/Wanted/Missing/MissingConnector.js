@@ -16,7 +16,7 @@ import Missing from './Missing';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.wanted.missing,
-    createCommandExecutingSelector(commandNames.MISSING_ALBUM_SEARCH),
+    createCommandExecutingSelector(commandNames.MISSING_BOOK_SEARCH),
     (missing, isSearchingForMissingAlbums) => {
 
       return {
@@ -117,14 +117,14 @@ class MissingConnector extends Component {
 
   onSearchSelectedPress = (selected) => {
     this.props.executeCommand({
-      name: commandNames.ALBUM_SEARCH,
+      name: commandNames.BOOK_SEARCH,
       bookIds: selected
     });
   }
 
   onSearchAllMissingPress = () => {
     this.props.executeCommand({
-      name: commandNames.MISSING_ALBUM_SEARCH
+      name: commandNames.MISSING_BOOK_SEARCH
     });
   }
 

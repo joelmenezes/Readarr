@@ -4,24 +4,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { grabQueueItem, removeQueueItem } from 'Store/Actions/queueActions';
-import createArtistSelector from 'Store/Selectors/createArtistSelector';
-import createAlbumSelector from 'Store/Selectors/createAlbumSelector';
+import createAuthorSelector from 'Store/Selectors/createAuthorSelector';
+import createAlbumSelector from 'Store/Selectors/createBookSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import QueueRow from './QueueRow';
 
 function createMapStateToProps() {
   return createSelector(
-    createArtistSelector(),
+    createAuthorSelector(),
     createAlbumSelector(),
     createUISettingsSelector(),
-    (artist, album, uiSettings) => {
+    (author, album, uiSettings) => {
       const result = _.pick(uiSettings, [
         'showRelativeDates',
         'shortDateFormat',
         'timeFormat'
       ]);
 
-      result.artist = artist;
+      result.author = author;
       result.album = album;
 
       return result;

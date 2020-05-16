@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
-import { fetchTrackFiles } from 'Store/Actions/trackFileActions';
+import { fetchBookFiles } from 'Store/Actions/bookFileActions';
 import FileDetails from './FileDetails';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 
@@ -20,7 +20,7 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  fetchTrackFiles
+  fetchBookFiles
 };
 
 class FileDetailsConnector extends Component {
@@ -29,7 +29,7 @@ class FileDetailsConnector extends Component {
   // Lifecycle
 
   componentDidMount() {
-    this.props.fetchTrackFiles({ id: this.props.id });
+    this.props.fetchBookFiles({ id: this.props.id });
   }
 
   //
@@ -67,7 +67,7 @@ class FileDetailsConnector extends Component {
 }
 
 FileDetailsConnector.propTypes = {
-  fetchTrackFiles: PropTypes.func.isRequired,
+  fetchBookFiles: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   id: PropTypes.number.isRequired,
   isFetching: PropTypes.bool.isRequired,

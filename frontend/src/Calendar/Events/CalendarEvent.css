@@ -16,7 +16,7 @@
   display: flex;
 }
 
-.artistName,
+.authorName,
 .albumTitle {
   @add-mixin truncate;
 
@@ -24,7 +24,7 @@
   margin-right: 10px;
 }
 
-.artistName {
+.authorName {
   color: #3a3f51;
   font-size: $defaultFontSize;
 }

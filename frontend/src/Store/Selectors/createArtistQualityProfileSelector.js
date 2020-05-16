@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect';
-import createArtistSelector from './createArtistSelector';
+import createAuthorSelector from './createAuthorSelector';
 
 function createArtistQualityProfileSelector() {
   return createSelector(
     (state) => state.settings.qualityProfiles.items,
-    createArtistSelector(),
-    (qualityProfiles, artist = {}) => {
+    createAuthorSelector(),
+    (qualityProfiles, author = {}) => {
       return qualityProfiles.find((profile) => {
-        return profile.id === artist.qualityProfileId;
+        return profile.id === author.qualityProfileId;
       });
     }
   );

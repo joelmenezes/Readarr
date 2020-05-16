@@ -5,9 +5,9 @@ import IconButton from 'Components/Link/IconButton';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
-import AlbumTitleLink from 'Album/AlbumTitleLink';
-import TrackQuality from 'Album/TrackQuality';
-import ArtistNameLink from 'Artist/ArtistNameLink';
+import AlbumTitleLink from 'Book/AlbumTitleLink';
+import TrackQuality from 'Book/TrackQuality';
+import AuthorNameLink from 'Author/AuthorNameLink';
 import HistoryEventTypeCell from './HistoryEventTypeCell';
 import HistoryDetailsModal from './Details/HistoryDetailsModal';
 import styles from './HistoryRow.css';
@@ -51,7 +51,7 @@ class HistoryRow extends Component {
 
   render() {
     const {
-      artist,
+      author,
       album,
       quality,
       qualityCutoffNotMet,
@@ -66,7 +66,7 @@ class HistoryRow extends Component {
       onMarkAsFailedPress
     } = this.props;
 
-    if (!artist || !album) {
+    if (!author || !album) {
       return null;
     }
 
@@ -96,9 +96,9 @@ class HistoryRow extends Component {
             if (name === 'authors.sortName') {
               return (
                 <TableRowCell key={name}>
-                  <ArtistNameLink
-                    titleSlug={artist.titleSlug}
-                    artistName={artist.artistName}
+                  <AuthorNameLink
+                    titleSlug={author.titleSlug}
+                    authorName={author.authorName}
                   />
                 </TableRowCell>
               );
@@ -206,7 +206,7 @@ class HistoryRow extends Component {
 
 HistoryRow.propTypes = {
   bookId: PropTypes.number,
-  artist: PropTypes.object.isRequired,
+  author: PropTypes.object.isRequired,
   album: PropTypes.object,
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,

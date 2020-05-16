@@ -3,7 +3,7 @@ import React from 'react';
 import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
-import TrackQuality from 'Album/TrackQuality';
+import TrackQuality from 'Book/TrackQuality';
 
 function TrackFileEditorRow(props) {
   const {

@@ -30,7 +30,7 @@
   border: none !important;
 }
 
-.artistName,
+.authorName,
 .albumTitle {
   @add-mixin truncate;
 
@@ -98,7 +98,7 @@
 
   .date,
   .time,
-  .artistName {
+  .authorName {
     flex: 0 0 100%;
   }
 

@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { saveDimensions, setIsSidebarVisible } from 'Store/Actions/appActions';
 import { fetchCustomFilters } from 'Store/Actions/customFilterActions';
-import { fetchArtist } from 'Store/Actions/artistActions';
+import { fetchAuthor } from 'Store/Actions/authorActions';
 import { fetchTags } from 'Store/Actions/tagActions';
 import { fetchQualityProfiles, fetchMetadataProfiles, fetchUISettings, fetchImportLists } from 'Store/Actions/settingsActions';
 import { fetchStatus } from 'Store/Actions/systemActions';
@@ -139,7 +139,7 @@ function createMapStateToProps() {
 function createMapDispatchToProps(dispatch, props) {
   return {
     dispatchFetchArtist() {
-      dispatch(fetchArtist());
+      dispatch(fetchAuthor());
     },
     dispatchFetchCustomFilters() {
       dispatch(fetchCustomFilters());

@@ -39,7 +39,7 @@ class AgendaEvent extends Component {
   render() {
     const {
       id,
-      artist,
+      author,
       title,
       titleSlug,
       releaseDate,
@@ -54,9 +54,9 @@ class AgendaEvent extends Component {
     } = this.props;
 
     const startTime = moment(releaseDate);
-    // const endTime = startTime.add(artist.runtime, 'minutes');
+    // const endTime = startTime.add(author.runtime, 'minutes');
     const downloading = !!(queueItem || grabbed);
-    const isMonitored = artist.monitored && monitored;
+    const isMonitored = author.monitored && monitored;
     const statusStyle = getStatusStyle(id, downloading, startTime, isMonitored, statistics.percentOfTracks);
 
     return (
@@ -85,9 +85,9 @@ class AgendaEvent extends Component {
             {formatTime(releaseDate, timeFormat)}
           </div>
 
-          <div className={styles.artistName}>
-            <Link to={`/author/${artist.titleSlug}`}>
-              {artist.artistName}
+          <div className={styles.authorName}>
+            <Link to={`/author/${author.titleSlug}`}>
+              {author.authorName}
             </Link>
           </div>
 
@@ -121,7 +121,7 @@ class AgendaEvent extends Component {
 
 AgendaEvent.propTypes = {
   id: PropTypes.number.isRequired,
-  artist: PropTypes.object.isRequired,
+  author: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   titleSlug: PropTypes.string.isRequired,
   albumType: PropTypes.string.isRequired,

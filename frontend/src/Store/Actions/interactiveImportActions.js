@@ -40,10 +40,10 @@ export const defaultState = {
       return path.toLowerCase();
     },
 
-    artist: function(item, direction) {
-      const artist = item.artist;
+    author: function(item, direction) {
+      const author = item.author;
 
-      return artist ? artist.sortName : '';
+      return author ? author.sortName : '';
     },
 
     quality: function(item, direction) {

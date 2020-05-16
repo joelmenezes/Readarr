@@ -11,10 +11,10 @@ import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
-import AlbumTitleLink from 'Album/AlbumTitleLink';
-import TrackQuality from 'Album/TrackQuality';
+import AlbumTitleLink from 'Book/AlbumTitleLink';
+import TrackQuality from 'Book/TrackQuality';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
-import ArtistNameLink from 'Artist/ArtistNameLink';
+import AuthorNameLink from 'Author/AuthorNameLink';
 import QueueStatusCell from './QueueStatusCell';
 import TimeleftCell from './TimeleftCell';
 import RemoveQueueItemModal from './RemoveQueueItemModal';
@@ -71,7 +71,7 @@ class QueueRow extends Component {
       trackedDownloadState,
       statusMessages,
       errorMessage,
-      artist,
+      author,
       album,
       quality,
       protocol,
@@ -141,10 +141,10 @@ class QueueRow extends Component {
               return (
                 <TableRowCell key={name}>
                   {
-                    artist ?
-                      <ArtistNameLink
-                        titleSlug={artist.titleSlug}
-                        artistName={artist.artistName}
+                    author ?
+                      <AuthorNameLink
+                        titleSlug={author.titleSlug}
+                        authorName={author.authorName}
                       /> :
                       title
                   }
@@ -335,7 +335,7 @@ class QueueRow extends Component {
         <RemoveQueueItemModal
           isOpen={isRemoveQueueItemModalOpen}
           sourceTitle={title}
-          canIgnore={!!(artist && album)}
+          canIgnore={!!(author && album)}
           onRemovePress={this.onRemoveQueueItemModalConfirmed}
           onModalClose={this.onRemoveQueueItemModalClose}
         />
@@ -354,7 +354,7 @@ QueueRow.propTypes = {
   trackedDownloadState: PropTypes.string,
   statusMessages: PropTypes.arrayOf(PropTypes.object),
   errorMessage: PropTypes.string,
-  artist: PropTypes.object,
+  author: PropTypes.object,
   album: PropTypes.object,
   quality: PropTypes.object.isRequired,
   protocol: PropTypes.string.isRequired,

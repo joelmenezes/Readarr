@@ -6,7 +6,7 @@ import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePo
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import * as calendarActions from 'Store/Actions/calendarActions';
-import { fetchTrackFiles, clearTrackFiles } from 'Store/Actions/trackFileActions';
+import { fetchBookFiles, clearBookFiles } from 'Store/Actions/bookFileActions';
 import { fetchQueueDetails, clearQueueDetails } from 'Store/Actions/queueActions';
 import Calendar from './Calendar';
 
@@ -23,8 +23,8 @@ function createMapStateToProps() {
 
 const mapDispatchToProps = {
   ...calendarActions,
-  fetchTrackFiles,
-  clearTrackFiles,
+  fetchBookFiles,
+  clearBookFiles,
   fetchQueueDetails,
   clearQueueDetails
 };
@@ -73,7 +73,7 @@ class CalendarConnector extends Component {
       }
 
       // if (trackFileIds.length) {
-      //   this.props.fetchTrackFiles({ trackFileIds });
+      //   this.props.fetchBookFiles({ trackFileIds });
       // }
     }
 
@@ -86,7 +86,7 @@ class CalendarConnector extends Component {
     unregisterPagePopulator(this.repopulate);
     this.props.clearCalendar();
     this.props.clearQueueDetails();
-    this.props.clearTrackFiles();
+    this.props.clearBookFiles();
     this.clearUpdateTimeout();
   }
 
@@ -165,8 +165,8 @@ CalendarConnector.propTypes = {
   gotoCalendarNextRange: PropTypes.func.isRequired,
   clearCalendar: PropTypes.func.isRequired,
   fetchCalendar: PropTypes.func.isRequired,
-  fetchTrackFiles: PropTypes.func.isRequired,
-  clearTrackFiles: PropTypes.func.isRequired,
+  fetchBookFiles: PropTypes.func.isRequired,
+  clearBookFiles: PropTypes.func.isRequired,
   fetchQueueDetails: PropTypes.func.isRequired,
   clearQueueDetails: PropTypes.func.isRequired
 };

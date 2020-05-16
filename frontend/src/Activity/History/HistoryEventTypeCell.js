@@ -48,11 +48,11 @@ function getTooltip(eventType, data) {
     case 'grabbed':
       return `Album grabbed from ${data.indexer} and sent to ${data.downloadClient}`;
     case 'artistFolderImported':
-      return 'Track imported from artist folder';
+      return 'Track imported from author folder';
     case 'trackFileImported':
       return 'Track downloaded successfully and picked up from download client';
     case 'downloadFailed':
-      return 'Album download failed';
+      return 'Book download failed';
     case 'trackFileDeleted':
       return 'Track file deleted';
     case 'trackFileRenamed':
@@ -64,7 +64,7 @@ function getTooltip(eventType, data) {
     case 'downloadImported':
       return 'Download completed and successfully imported';
     case 'downloadIgnored':
-      return 'Album Download Ignored';
+      return 'Book Download Ignored';
     default:
       return 'Unknown event';
   }
